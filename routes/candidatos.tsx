@@ -1,8 +1,8 @@
 /** @jsx h */
-import { h, Fragment } from "preact";
-import { tw } from "@twind";
-import { PageProps, Handlers } from "$fresh/server.ts";
+import { Fragment, h } from "preact";
+import { Handlers, PageProps } from "$fresh/server.ts";
 import tseApi, { Candidato } from "../clients/tse.ts";
+import Candidatos from "../islands/Candidatos.tsx";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
@@ -13,36 +13,23 @@ export const handler: Handlers = {
     }
 
     const cargos = (await tseApi.listarCandidatos(uf)) as unknown as {
-      candidatos: any[];
+      candidatos: Candidato[];
     };
-    return ctx.render({ cargos });
+    return ctx.render({ cargos, uf });
   },
 };
 
 export default function Greet(
-  props: PageProps<{ cargos: Array<{ nome: string; candidatos: Candidato[] }> }>
+  props: PageProps<
+    { cargos: Array<{ nome: string; candidatos: Candidato[] }>; uf: string }
+  >,
 ) {
   const cargos = props.data.cargos;
+  const uf = props.data.uf;
+
   return (
-    <div class={tw`flex items-center align-center`}>
-      <form class={tw`w-1/5`}>
-        <div class={tw`flex flex-col `}>
-          {cargos.map(({ nome, candidatos }) => (
-            <div class={tw`m-2 flex flex-col`}>
-              <label class={tw`font-bold`}>{nome}</label>
-              <select key={nome} name={nome} class={tw`m-2`}>
-                {candidatos.map(({ nomeUrna, numero, id }) => (
-                  <option
-                    value={id}
-                    key={id}
-                  >{`${numero} - ${nomeUrna}`}</option>
-                ))}
-              </select>
-            </div>
-          ))}
-        </div>
-        <button type="submit">Enviar</button>
-      </form>
+    <div>
+      <Candidatos cargos={cargos} uf={uf} />
     </div>
   );
 }

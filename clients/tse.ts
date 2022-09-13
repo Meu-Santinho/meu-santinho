@@ -1,7 +1,7 @@
 const constants = {
   cargos: [
     { nome: "Governador", codigo: 3 },
-    { nome: "Vice-governador", codigo: 4 },
+    // { nome: "Vice-governador", codigo: 4 },
     { nome: "Senador", codigo: 5 },
     { nome: "Deputado Federal", codigo: 6 },
     { nome: "Deputado Estadual", codigo: 7 },
@@ -16,21 +16,36 @@ export default {
     const candidatos = await Promise.all(
       constants.cargos.map(async ({ codigo, nome }) => {
         const { candidatos } = await fetch(
-          `${api.baseUrl}/${api.routes.listarCandidatos(
-            uf,
-            constants.eleicao,
-            `${codigo}`
-          )}`
+          `${api.baseUrl}/${
+            api.routes.listarCandidatos(
+              uf,
+              constants.eleicao,
+              `${codigo}`,
+            )
+          }`,
         ).then((r) => r.json());
-        console.log({ candidatos });
         return { nome, candidatos } as {
           nome: string;
           candidatos: Candidato[];
         };
-      })
+      }),
     );
 
     return candidatos;
+  },
+
+  async infosCandidato(uf: string, candidatoId: string) {
+    const infosCandidato = await fetch(
+      `${api.baseUrl}/${
+        api.routes.infosCandidato(
+          uf,
+          constants.eleicao,
+          candidatoId,
+        )
+      }`,
+    ).then((res) => res.json()).catch((error ) => console.log(error));
+   
+    return infosCandidato;
   },
 };
 
@@ -39,8 +54,257 @@ const api = {
   routes: {
     listarCandidatos: (uf: string, eleicaoId: string, cargoId: string) =>
       `candidatura/listar/2022/${uf}/${eleicaoId}/${cargoId}/candidatos`,
+
+    infosCandidato: (uf: string, eleicaoId: string, candidatoId: string) =>
+      `candidatura/buscar/2022/${uf}/${eleicaoId}/candidato/${candidatoId}`,
   },
 };
+
+export interface infosCandidato {
+  id: number;
+  nomeUrna: string;
+  numero: number;
+  idCandidatoSuperior: number;
+  nomeCompleto: string;
+  descricaoSexo: string;
+  dataDeNascimento: string;
+  tituloEleitor: string;
+  cpf: string;
+  descricaoEstadoCivil: string;
+  descricaoCorRaca: string;
+  descricaoSituacao: string;
+  nacionalidade: string;
+  grauInstrucao: string;
+  ocupacao: string;
+  gastoCampanha1T: number;
+  gastoCampanha2T: number;
+  sgUfNascimento: string;
+  nomeMunicipioNascimento: string;
+  localCandidatura: string;
+  ufCandidatura: string;
+  ufSuperiorCandidatura: string;
+  dataUltimaAtualizacao: string;
+  fotoUrl: string;
+  fotoDataUltimaAtualizacao: null;
+  descricaoTotalizacao: string;
+  nomeColigacao: string;
+  composicaoColigacao: string;
+  descricaoTipoDrap: string;
+  numeroProcessoDrap: string;
+  numeroProcessoDrapEncrypt: string;
+  numeroProcesso: string;
+  numeroProcessoEncrypt: string;
+  numeroProcessoPrestContas: string;
+  numeroProcessoPrestContasEncrypt: string;
+  numeroProtocolo: null;
+  cargo: {
+    codigo: number;
+    sigla: null;
+    nome: string;
+    codSuperior: number;
+    titular: boolean;
+    contagem: number;
+  };
+  bens: [
+    {
+      ordem: number;
+      descricao: string;
+      descricaoDeTipoDeBem: string;
+      valor: number;
+      dataUltimaAtualizacao: string;
+    },
+    {
+      ordem: number;
+      descricao: string;
+      descricaoDeTipoDeBem: string;
+      valor: number;
+      dataUltimaAtualizacao: string;
+    },
+    {
+      ordem: number;
+      descricao: string;
+      descricaoDeTipoDeBem: string;
+      valor: number;
+      dataUltimaAtualizacao: string;
+    },
+  ];
+  totalDeBens: number;
+  vices: [
+    {
+      DT_ULTIMA_ATUALIZACAO: string;
+      nomeColigacao: null;
+      composicaoColigacao: null;
+      stRegistro: null;
+      situacaoCandidato: null;
+      urlFoto: string;
+      sq_ELEICAO: number;
+      sq_CANDIDATO: number;
+      sq_CANDIDATO_SUPERIOR: null;
+      nr_CANDIDATO: string;
+      nm_URNA: string;
+      nm_CANDIDATO: string;
+      ds_CARGO: string;
+      nm_PARTIDO: string;
+      sg_PARTIDO: string;
+      dt_ULTIMA_ATUALIZACAO: number;
+      sg_UE: string;
+    },
+  ];
+  partido: {
+    numero: number;
+    sigla: string;
+    nome: string;
+  };
+  eleicao: {
+    id: number;
+    siglaUF: null;
+    localidadeSgUe: null;
+    ano: number;
+    codigo: null;
+    nomeEleicao: null;
+    tipoEleicao: null;
+    turno: null;
+    tipoAbrangencia: null;
+    dataEleicao: null;
+    codSituacaoEleicao: null;
+    descricaoSituacaoEleicao: null;
+    descricaoEleicao: string;
+  };
+  emails: [
+    string,
+  ];
+  sites: [];
+  arquivos: [
+    {
+      idArquivo: number;
+      nome: string;
+      url: string;
+      tipo: string;
+      codTipo: string;
+      fullFilePath: null;
+      fileInputStream: null;
+      fileByteArray: null;
+    },
+    {
+      idArquivo: number;
+      nome: string;
+      url: string;
+      tipo: string;
+      codTipo: string;
+      fullFilePath: null;
+      fileInputStream: null;
+      fileByteArray: null;
+    },
+    {
+      idArquivo: number;
+      nome: string;
+      url: string;
+      tipo: string;
+      codTipo: string;
+      fullFilePath: null;
+      fileInputStream: null;
+      fileByteArray: null;
+    },
+    {
+      idArquivo: number;
+      nome: string;
+      url: string;
+      tipo: string;
+      codTipo: string;
+      fullFilePath: null;
+      fileInputStream: null;
+      fileByteArray: null;
+    },
+    {
+      idArquivo: number;
+      nome: string;
+      url: string;
+      tipo: string;
+      codTipo: string;
+      fullFilePath: null;
+      fileInputStream: null;
+      fileByteArray: null;
+    },
+  ];
+  eleicoesAnteriores: [
+    {
+      nrAno: number;
+      id: string;
+      nomeUrna: string;
+      nomeCandidato: string;
+      idEleicao: string;
+      sgUe: string;
+      local: string;
+      cargo: string;
+      partido: string;
+      situacaoTotalizacao: string;
+      txLink: string;
+    },
+    {
+      nrAno: number;
+      id: string;
+      nomeUrna: string;
+      nomeCandidato: string;
+      idEleicao: string;
+      sgUe: string;
+      local: string;
+      cargo: string;
+      partido: string;
+      situacaoTotalizacao: string;
+      txLink: string;
+    },
+    {
+      nrAno: number;
+      id: string;
+      nomeUrna: string;
+      nomeCandidato: string;
+      idEleicao: string;
+      sgUe: string;
+      local: string;
+      cargo: string;
+      partido: string;
+      situacaoTotalizacao: string;
+      txLink: string;
+    },
+    {
+      nrAno: number;
+      id: string;
+      nomeUrna: string;
+      nomeCandidato: string;
+      idEleicao: string;
+      sgUe: string;
+      local: string;
+      cargo: string;
+      partido: string;
+      situacaoTotalizacao: string;
+      txLink: string;
+    },
+  ];
+  substituto: null;
+  motivos: null;
+  codigoSituacaoCandidato: number;
+  descricaoSituacaoCandidato: string;
+  isCandidatoInapto: boolean;
+  codigoSituacaoPartido: string;
+  descricaoSituacaoPartido: string;
+  isCandFechado: boolean;
+  st_SUBSTITUIDO: string;
+  cnpjcampanha: string;
+  gastoCampanha: number;
+  st_MOTIVO_FICHA_LIMPA: boolean;
+  st_MOTIVO_ABUSO_PODER: boolean;
+  st_MOTIVO_COMPRA_VOTO: boolean;
+  st_MOTIVO_CONDUTA_VEDADA: boolean;
+  st_MOTIVO_GASTO_ILICITO: boolean;
+  ds_MOTIVO_OUTROS: null;
+  st_MOTIVO_AUSENCIA_REQUISITO: boolean;
+  st_MOTIVO_IND_PARTIDO: boolean;
+  st_DIVULGA: true;
+  st_DIVULGA_BENS: true;
+  st_REELEICAO: boolean;
+  st_DIVULGA_ARQUIVOS: boolean;
+  descricaoNaturalidade: string;
+}
 
 export interface Candidato {
   id: number;

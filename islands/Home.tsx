@@ -1,6 +1,7 @@
 /** @jsx h */
 import { h } from "preact";
 import { tw } from "@twind";
+import ComboBoxSelect from "../components/ui/comboBox/ComboBox.tsx"
 
 const UFs = [
   "AC",
@@ -50,6 +51,7 @@ export default function Home() {
               ))}
             </select>
             <button type="submit">Go</button>
+            <ComboBoxSelect />
           </form>
         </div>
     </div>

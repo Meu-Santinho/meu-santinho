@@ -11,8 +11,8 @@ const menuNavigation = [
 
 export default function NavBar() {
   return (
-    //@ts-expect-error: erro
     <Disclosure as="nav" class={tw`bg-black shadow`}>
+      {/* @ts-expect-error: erro */}
       {({ open }: any) => (
         <Fragment>
           <div class={tw`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
@@ -33,16 +33,21 @@ export default function NavBar() {
                 <Disclosure.Button
                   class={tw`inline-flex items-center justify-center py-2 px-4 rounded-md text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white hover:transition-all`}
                 >
-                  <span class={tw`sr-only`}>Open main menu</span>
-                  {open ? "X" : (
-                    "Menu"
-                  )}
+                  {/* @ts-expect-error: erro */}
+                  <Fragment>
+                    <span class={tw`sr-only`}>Open main menu</span>
+                    {open ? "X" : (
+                      "Menu"
+                    )}
+                  </Fragment>
                 </Disclosure.Button>
               </div>
             </div>
           </div>
+          
           {menuNavigation.map((option) => (
             <Disclosure.Panel class={tw`sm:hidden`}>
+              {/* @ts-expect-error: erro */}
               <div class={tw`pt-1 pb-2 space-y-1`}>
                 <Disclosure.Button
                   class={tw`bg-white border-gray-700 text-black block pl-3 pr-4 py-2 border-l-4 text-base font-medium hover:border-white hover:text-black hover:bg-gray-200 hover:transition-all hover:ease-out rounded-r-md`}

@@ -18,7 +18,7 @@ export default function Home() {
           <form method="GET" action="/candidatos">
             <div class={tw`block text-center`}>
               <div>
-                <label class={tw`font-bold text-xl p-6`}>
+                <label id="selecione" class={tw`font-bold text-xl p-6`}>
                   Selecione sua unidade federativa
                 </label>
               </div>

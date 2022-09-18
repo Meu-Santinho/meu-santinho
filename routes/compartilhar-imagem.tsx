@@ -2,13 +2,12 @@
 import { h } from "preact";
 import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import tseApi, { infosCandidato } from "../../clients/tse.ts";
+import tseApi, { infosCandidato } from "../clients/tse.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
     const url = new URL(req.url);
-    const path = url.pathname;
-    const uf = path.substring(23, 25);
+    const uf = url.searchParams.get('uf')
     const governador = url.searchParams.get("Governador");
     const senador = url.searchParams.get("Senador");
     const depEstadual = url.searchParams.get("Deputado Estadual");

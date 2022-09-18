@@ -7,6 +7,6 @@
     "@twind": "./utils/twind.ts",
     "twind": "https://esm.sh/twind@0.16.17",
     "twind/": "https://esm.sh/twind@0.16.17/",
-    "headlessui": "https://esm.sh/@headlessui/react?alias=react:preact/compat,@types/react:preact/compat&external=preact/compat"
+    "headlessui": "https://esm.sh/@headlessui/react?alias=react:preact/compat&external=preact/compat"
   }
 }

@@ -2,7 +2,7 @@
 import { h } from "preact";
 import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import tseApi, { infosCandidato } from "../../clients/tse.ts";
+import tseApi, { infosCandidato } from "../clients/tse.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {

@@ -23,8 +23,9 @@ export default function Candidatos(
           <div class={tw`text-center`}>
             <form
               autocomplete="off"
-              action={`/compartilharImagem/uf=${props.uf}`}
+              action={`/compartilhar-imagem`}
             >
+              <input type="hidden" name="uf" value={props.uf} />
               <div class={tw`flex flex-col `}>
                 {cargos.map(({ nome, candidatos }) => (
                   <div class={tw`m-2 flex flex-col`}>

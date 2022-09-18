@@ -11,10 +11,11 @@ interface APIData {
 
 export const handler: Handlers = {
   async GET(req, ctx) {
+    // TODO: Later
     const ip = (ctx.remoteAddr as Deno.NetAddr).hostname;
     const res = await fetch("http://ip-api.com/json/" + ip);
     const data: APIData = await res.json();
-    console.log({ data})
+
     return ctx.render({ data });
   },
 };

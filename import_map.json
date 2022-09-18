@@ -7,6 +7,7 @@
     "@twind": "./utils/twind.ts",
     "twind": "https://esm.sh/twind@0.16.17",
     "twind/": "https://esm.sh/twind@0.16.17/",
-    "headlessui": "https://esm.sh/@headlessui/react@1.6.6?alias=react:preact/compat,react-dom:preact/compat,@types/react:preact/compat&deps=preact@10.10.0"
+    "headlessui": "https://esm.sh/@headlessui/react@1.6.6?alias=react:preact/compat,react-dom:preact/compat,@types/react:preact/compat&deps=preact@10.10.0",
+    "heroicons": "https://esm.sh/@heroicons/react@1.6.6?alias=react:preact/compat,react-dom:preact/compat,@types/react:preact/compat&deps=preact@10.10.0"
   }
 }

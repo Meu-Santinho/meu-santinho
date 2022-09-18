@@ -1,59 +1,37 @@
 /** @jsx h */
 import { h } from "preact";
 import { tw } from "@twind";
-import ComboBoxSelect from "../components/ui/comboBox/ComboBox.tsx"
-
-const UFs = [
-  "AC",
-  "AL",
-  "AP",
-  "AM",
-  "BA",
-  "CE",
-  "DF",
-  "ES",
-  "GO",
-  "MA",
-  "MT",
-  "MS",
-  "MG",
-  "PA",
-  "PB",
-  "PR",
-  "PE",
-  "PI",
-  "RJ",
-  "RN",
-  "RS",
-  "RO",
-  "RR",
-  "SC",
-  "SP",
-  "SE",
-  "TO",
-];
+import HeaderSection from "../components/ui/headerSection/HeaderSection.tsx";
+import Button from "../components/ui/button/Button.tsx";
+import SelectHome from "../components/ui/select/SelectHome.tsx";
+import Layout from "../Layout.tsx";
+import Hero from "../components/ui/hero/Hero.tsx";
+import Breadcrumb from "../components/ui/breadcrumb/BreadCrumb.tsx";
 
 export default function Home() {
   return (
-    <div>
+    <Layout>
+      <div class={tw`text-center block mb-40`}>
+        <Hero />
+        <Breadcrumb />
         <div class={tw`p-4 mx-auto max-w-screen-md`}>
-          <img
-            src="/logo.svg"
-            height="100px"
-            alt="the fresh logo: a sliced lemon dripping with juice"
-          />
           <form method="GET" action="/candidatos">
-            <select name="uf">
-              {UFs.map((uf) => (
-                <option value={uf} key={uf}>
-                  {uf}
-                </option>
-              ))}
-            </select>
-            <button type="submit">Go</button>
-            <ComboBoxSelect />
+            <div class={tw`block text-center`}>
+              <div>
+                <label class={tw`font-bold text-xl p-6`}>
+                  Selecione sua unidade federativa
+                </label>
+              </div>
+              <div class={tw`my-8 xl:mx-56 lg:mx-52 md:mx-48 mx-36`}>
+                <SelectHome />
+              </div>
+              <div>
+                <Button type="submit">Próximo</Button>
+              </div>
+            </div>
           </form>
         </div>
-    </div>
+      </div>
+    </Layout>
   );
 }

@@ -2,6 +2,10 @@
 import { h } from "preact";
 import { tw } from "@twind";
 import { Candidato } from "../clients/tse.ts";
+import ComboBoxSelect from "../components/ui/comboBox/ComboBox.tsx";
+import HeaderSection from "../components/ui/headerSection/HeaderSection.tsx";
+import Button from "../components/ui/button/Button.tsx";
+import Layout from "../Layout.tsx";
 
 export default function Candidatos(
   props: {
@@ -10,33 +14,34 @@ export default function Candidatos(
   },
 ) {
   const cargos = props.cargos;
+
   return (
-    <div>
-      <div class={tw`flex items-center align-center`}>
-        <form
-          class={tw`w-1/5`}
-          action={`/compartilharImagem/uf=${props.uf}`}
-        >
-          <div class={tw`flex flex-col `}>
-            {cargos.map(({ nome, candidatos }) => (
-              <div class={tw`m-2 flex flex-col`}>
-                <label class={tw`font-bold`}>{nome}</label>
-                <select key={nome} name={nome} class={tw`m-2`}>
-                  {candidatos.map(({ nomeUrna, numero, id }) => (
-                    <option
-                      value={id}
-                      key={id}
-                    >
-                      {`${numero} - ${nomeUrna}`}
-                    </option>
-                  ))}
-                </select>
+    <Layout>
+      <div class={tw`items-center align-center text-center mb-10`}>
+        <HeaderSection />
+        <div class={tw`max-w-7xl mx-auto py-4 px-8 sm:px-16 md:px-64 lg:px-96`}>
+          <div class={tw`text-center`}>
+            <form
+              action={`/compartilharImagem/uf=${props.uf}`}
+            >
+              <div class={tw`flex flex-col `}>
+                {cargos.map(({ nome, candidatos }) => (
+                  <div class={tw`m-2 flex flex-col`}>
+                    <ComboBoxSelect
+                      key={nome}
+                      nome={nome}
+                      candidatos={candidatos}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+              <div class={tw`mt-10`}>
+                <Button type="submit">Gerar Imagens</Button>
+              </div>
+            </form>
           </div>
-          <button type="submit">Enviar</button>
-        </form>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }

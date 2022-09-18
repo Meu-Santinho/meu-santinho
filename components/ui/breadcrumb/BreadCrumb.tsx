@@ -2,17 +2,12 @@
 import { Fragment, h } from "preact";
 import { tw } from "@twind";
 
-const pages = [
-  { name: "Projects", href: "#", current: false },
-  { name: "Project Nero", href: "#", current: true },
-];
-
 export default function Breadcrumb() {
   return (
-    <Fragment
-      aria-label="Breadcrumb"
-    >
-      <div class={tw`bg-gray-200 border-b border-gray-200 align-center items-center text-center`}>
+    <Fragment aria-label="Breadcrumb">
+      <div
+        class={tw`bg-gray-200 border-b border-gray-200 align-center items-center text-center`}
+      >
         <div class={tw`block p-4`}>
           <label
             class={tw`mt-1 font-extrabold text-gray-900 sm:tracking-tight text-xl`}

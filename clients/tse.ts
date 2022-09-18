@@ -1,7 +1,6 @@
 const constants = {
   cargos: [
     { nome: "Governador", codigo: 3 },
-    // { nome: "Vice-governador", codigo: 4 },
     { nome: "Senador", codigo: 5 },
     { nome: "Deputado Federal", codigo: 6 },
     { nome: "Deputado Estadual", codigo: 7 },
@@ -43,8 +42,8 @@ export default {
           candidatoId,
         )
       }`,
-    ).then((res) => res.json()).catch((error ) => console.log(error));
-   
+    ).then((res) => res.json()).catch(console.log);
+
     return infosCandidato;
   },
 };

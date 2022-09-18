@@ -5,10 +5,6 @@ import { Combobox } from "headlessui";
 import { tw } from "@twind";
 import { Candidato } from "../../../clients/tse.ts";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function ComboBoxSelect(
   props: { key: string; nome: string; candidatos: Candidato[] },
 ) {
@@ -36,18 +32,21 @@ export default function ComboBoxSelect(
       as="div"
       //@ts-ignore : erro
       value={candidatoSelecionado || 0}
-       //@ts-ignore : erro
+      //@ts-ignore : erro
       onChange={setCandidatoSelecionado}
       key={props.key}
     >
-     {/* @ts-expect-error: erro */}
+      {/* @ts-expect-error: erro */}
       <Fragment>
+        {/* @ts-expect-error: erro */}
         <Combobox.Label class={tw`block font-bold text-xl text-gray-black`}>
           {props.nome}
         </Combobox.Label>
         <div class={tw`relative mt-1`}>
+          
           <Combobox.Input
-            class={tw`w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm`}
+          //@ts-expect-error: erro
+            class={tw`w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black sm:text-sm text-black font-semibold`}
             onChange={(e) => setBusca((e.target as HTMLInputElement).value)}
             placeholder="Busque por número ou nome"
             displayValue={() =>
@@ -55,7 +54,9 @@ export default function ComboBoxSelect(
                 ? candidato?.numero + " " + "-" + " " + candidato?.nomeUrna
                 : ""}
           />
+          
           <Combobox.Button
+          //@ts-expect-error: erro
             class={tw`absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none`}
           >
           </Combobox.Button>
@@ -64,34 +65,24 @@ export default function ComboBoxSelect(
               class={tw`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm`}
             >
               {/* @ts-expect-error: erro */}
-              {candidatosFiltrados.map((person) => (
+              {candidatosFiltrados.map((candidato) => (
                 <Combobox.Option
-                  key={person.id}
-                  value={person.id}
-                  className={({ active }) =>
-                    classNames(
-                      "relative cursor-default select-none py-2 pl-8 pr-4",
-                      active ? "bg-indigo-600 text-white" : "text-gray-900",
-                    )}
+                  key={candidato.id}
+                  value={candidato.id}
+                  class={tw`relative cursor-pointer select-none py-2 pl-8 pr-4 text-black font-semibold text-lg hover:bg-gray-200 text-left`}
                 >
                   {/* @ts-expect-error: erro */}
-                  {({ active, selected }: any) => (
+                  {({ selected }: any) => (
                     <Fragment>
                       <span
-                        className={classNames(
-                          "block truncate",
-                          selected && "font-semibold",
-                        )}
+                        class={tw`text-left`}
                       >
-                        {`${person.numero} - ${person.nomeUrna}`}
+                        {`${candidato.numero} - ${candidato.nomeUrna}`}
                       </span>
 
                       {selected && (
                         <span
-                          class={classNames(
-                            "absolute inset-y-0 left-0 flex items-center pl-1.5",
-                            active ? "text-white" : "text-indigo-600",
-                          )}
+                          class={tw`absolute inset-y-0 left-0 flex items-center pl-1.5 text-black`}
                         >
                         </span>
                       )}

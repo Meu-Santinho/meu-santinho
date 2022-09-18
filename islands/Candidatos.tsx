@@ -18,10 +18,11 @@ export default function Candidatos(
   return (
     <Layout>
       <div class={tw`items-center align-center text-center mb-10`}>
-        <HeaderSection />
+        <HeaderSection title="Meu Santinho" subTitle="Escolha seus candidatos, gere a imagem e compartilhe seu santinho online no Instagram!"/>
         <div class={tw`max-w-7xl mx-auto py-4 px-8 sm:px-16 md:px-64 lg:px-96`}>
           <div class={tw`text-center`}>
             <form
+              autocomplete="off"
               action={`/compartilharImagem/uf=${props.uf}`}
             >
               <div class={tw`flex flex-col `}>

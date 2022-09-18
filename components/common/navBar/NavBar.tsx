@@ -1,7 +1,7 @@
 /** @jsx h */
 import { Fragment, h } from "preact";
 import { tw } from "@twind";
-import { Disclosure, Menu, Transition } from "headlessui";
+import { Disclosure } from "headlessui";
 import Navigator from "./Navigator.tsx";
 
 const menuNavigation = [
@@ -50,6 +50,7 @@ export default function NavBar() {
               {/* @ts-expect-error: erro */}
               <div class={tw`pt-1 pb-2 space-y-1`}>
                 <Disclosure.Button
+                  //@ts-expect-error: erro
                   class={tw`bg-white border-gray-700 text-black block pl-3 pr-4 py-2 border-l-4 text-base font-medium hover:border-white hover:text-black hover:bg-gray-200 hover:transition-all hover:ease-out rounded-r-md`}
                 >
                   {option.nome}
@@ -62,3 +63,4 @@ export default function NavBar() {
     </Disclosure>
   );
 }
+

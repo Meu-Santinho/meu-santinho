@@ -28,9 +28,6 @@ const navigation = {
 export default function Footer() {
   return (
     <footer class={tw`aria-labelledby="footer-heading bg-black`}>
-      <h2 id="footer-heading" class={tw`sr-only`}>
-        Footer
-      </h2>
       <div class={tw`max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8`}>
         <div class={tw`xl:grid xl:grid-cols-3 xl:gap-8`}>
           <div class={tw`space-y-8 xl:col-span-1`}>

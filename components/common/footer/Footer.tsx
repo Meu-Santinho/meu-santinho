@@ -58,7 +58,7 @@ export default function Footer() {
             >
               <a
                 href={user.href}
-                class="flex items-center align-center text-white font-light mr-2 my-4"
+                class="flex items-center align-center text-white font-light my-2"
               >
                 {navigation.social.map((item) => (
                   <a

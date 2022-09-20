@@ -31,48 +31,54 @@ export default function GerarSantinho({ candidatos }) {
 
     // Colocar template no canva
     const img = new Image(); // Create new img element
+    img.crossOrigin = "anonymous";
     img.src = template;
 
     img.onload = () => {
       ctx?.drawImage(img, 0, 1, 1080, 1920);
 
-      const preencheCandidato = ({
-        yNome,
-        yNumero,
-        nomeUrna: nome,
-        numero,
-        yImage,
-        fotoUrl,
-      }) => {
+      const preencheCandidato = (
+        { yNome, yNumero, nomeUrna: nome, numero, yImage, fotoUrl },
+        i
+      ) => {
         if (!ctx) {
           return;
         }
 
-        // //img do candidato
-        // const img_candidato = new Image();
-        // img_candidato.src =
-        //   "https://meu-santinho-proxy.deno.dev/candidaturas/oficial/2022/BR/BA/546/candidatos/910005/foto.jpeg?a";
+        //img do candidato
+        const img_candidato = new Image();
+        img_candidato.src =
+          "https://meu-santinho-proxy.deno.dev/candidaturas/oficial/2022/BR/BA/546/candidatos/910005/foto.jpeg?a";
+        img_candidato.crossOrigin = "anonymous";
+        img_candidato.onload = () => {
+          console.log("image loaded");
+          document.body.appendChild(img_candidato);
+          ctx.drawImage(img_candidato, 0, 0, 300, 300);
+          ctx.fillStyle = "#FFFFFF";
+          console.log(nome);
+          const fontSize = nome.length > 15 ? "64" : "90";
 
-        // img_candidato.onload = () => {
-        //   ctx.drawImage(img_candidato, 0, 1, 100, 100);
-        // };
+          ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;
 
-        ctx.fillStyle = "#FFFFFF";
-        console.log(nome);
-        const fontSize = nome.length > 15 ? "64" : "90";
+          ctx.fillText(nome, 393, yNome);
+          ctx.fillStyle = "#004258";
+          ctx.font = `bold 128px 'Source Sans Pro'`;
 
-        ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;
+          numero
+            .toString()
+            .split("")
+            .forEach((algarismo, i) => {
+              ctx.fillText(algarismo, 410 + i * 135, yNumero);
+            });
 
-        ctx.fillText(nome, 393, yNome);
-        ctx.fillStyle = "#004258";
-        ctx.font = `bold 128px 'Source Sans Pro'`;
-
-        numero
-          .toString()
-          .split("")
-          .forEach((algarismo, i) => {
-            ctx.fillText(algarismo, 410 + i * 135, yNumero);
-          });
+          if (i === 4) {
+            const output = new Image();
+            output.src = canvas.toDataURL();
+            const div = document.querySelector("#output");
+            output.style.width = "100%";
+            div?.appendChild(output);
+          }
+        };
       };
       [
         {
@@ -91,11 +97,6 @@ export default function GerarSantinho({ candidatos }) {
         { yNome: 1230, yNumero: 1370, ...candidatos.governador, yImage: 165 },
         { yNome: 1590, yNumero: 1715, ...candidatos.governador, yImage: 165 },
       ].forEach(preencheCandidato);
-      var output = new Image();
-      output.src = canvas.toDataURL();
-      const div = document.querySelector("#output");
-      output.style.width = "100%";
-      div?.appendChild(output);
     };
   }, []);
 

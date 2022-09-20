@@ -1,7 +1,5 @@
-/** @jsx h */
 import { useEffect } from "preact/hooks";
-import { h } from "preact";
-import { tw } from "@twind";
+
 import { template } from "../utils/template.js";
 
 type Cargos =
@@ -22,7 +20,6 @@ export interface Props {
 
 export default function GerarSantinho({ candidatos }) {
   useEffect(() => {
-    console.log(candidatos);
     const canvas = document.createElement("canvas");
 
     canvas.width = 1080;
@@ -58,7 +55,6 @@ export default function GerarSantinho({ candidatos }) {
         // };
 
         ctx.fillStyle = "#FFFFFF";
-        console.log(nome);
         const fontSize = nome.length > 15 ? "64" : "90";
 
         ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;

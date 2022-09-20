@@ -1,12 +1,8 @@
-/** @jsx h */
-import { h } from "preact";
-import { tw } from "@twind";
-
 const navigation = {
   usuarios: [
-    { id: "soutofernando", href: "https://github.com/soutofernando" },
-    { id: "lucis", href: "https://github.com/lucis" },
-    { id: "marianacoimbra", href: "https://github.com/marianacoimbra" },
+    { id: "Fernando Souto", href: "https://github.com/soutofernando" },
+    { id: "Lucis", href: "https://github.com/lucis" },
+    { id: "Mariana Coimbra", href: "https://github.com/marianacoimbra" },
   ],
   social: [
     {
@@ -27,58 +23,56 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer class={tw`aria-labelledby="footer-heading bg-black`}>
-      <div class={tw`max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8`}>
-        <div class={tw`xl:grid xl:grid-cols-3 xl:gap-8`}>
-          <div class={tw`space-y-8 xl:col-span-1`}>
-            <h1
-              class={tw`mt-1 text-md font-extrabold text-white sm:text-md sm:tracking-tight lg:text-xl`}
-            >
-              Meu Santinho
-            </h1>
-            <div class={tw`flex`}>
-              <p class={tw`text-white text-base mr-4`}>
-                GitHub
-              </p>
-              <div class={tw`flex `}>
-                {navigation.social.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    class={tw`text-gray-400 hover:text-gray-500`}
-                  >
-                    <span class={tw`sr-only`}>{item.name}</span>
-                    <item.icon class={tw`h-6 w-6`} aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
+    <footer class="bg-gray mt-40 py-16	">
+      <div class={`flex items-center align-center flex-col`}>
+        <img src="/VectorFooter.svg" class="w-10/12 h-6 mb-10"></img>
+        <div>
+          <div class="flex">
+            <p class="text-white text-base mr-2">
+              Este projeto tem o código aberto no Github
+            </p>
+            <div class="flex text-gray-400">
+              {navigation.social.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  class="text-gray-400 hover:text-gray-500"
+                >
+                  <span class="sr-only">{item.name}</span>
+                  <item.icon class="h-6 w-6 text-gray-400" aria-hidden="true" />
+                </a>
+              ))}
             </div>
           </div>
         </div>
-        <div class={tw`mt-12 border-t border-white pt-8`}>
-          <p class={tw`text-base text-white xl:text-center sm:flex block`}>
-            &copy; 2022 desenvolvido por &nbsp;
-            {navigation.usuarios.map((user) => (
-              <button
-                class={tw`flex align-center items-center mr-2 hover:underline hover:text-white hover:transition-all mt-1 sm:mt-0`}
+      </div>
+      <div class="flex items-center align-center flex-col">
+        <p class="text-base text-white xl:text-center sm:flex block">
+          Desenvolvido por:
+        </p>
+        <div class="flex items-center align-center">
+          {navigation.usuarios.map((user) => (
+            <button
+              class="flex align-center items-center mr-2 hover:underline hover:text-white hover:transition-all mt-1 sm:mt-0"
+              href={user.href}
+            >
+              <a
                 href={user.href}
+                class="flex items-center align-center text-white font-light my-2"
               >
-                <a href={user.href} class={tw`flex items-center align-center`}>
-                  {navigation.social.map((item) => (
-                    <a
-                      key={item.name}
-                      href={user.href}
-                      class={tw`text-gray-400 hover:text-gray-500`}
-                    >
-                      <span class={tw`sr-only`}>{item.name}</span>
-                      <item.icon class={tw`h-6 w-6`} aria-hidden="true" />
-                    </a>
-                  ))}
-                  {`${user.id}`}
-                </a>
-              </button>
-            ))}
-          </p>
+                {navigation.social.map((item) => (
+                  <a
+                    key={item.name}
+                    href={user.href}
+                    class="text-gray-400 hover:text-gray-500 flex items-start font-light"
+                  >
+                    <span class="sr-only">{item.name}</span>
+                  </a>
+                ))}
+                {`${user.id}`}
+              </a>
+            </button>
+          ))}
         </div>
       </div>
     </footer>

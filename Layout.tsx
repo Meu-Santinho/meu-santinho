@@ -1,17 +1,15 @@
-/** @jsx h */
-import { h } from "preact";
 import { PropsWithChildren } from "https://esm.sh/v94/preact@10.10.0/compat/src/index.d.ts";
-import NavBar from "./components/common/navBar/NavBar.tsx";
+import Logo from "./components/common/navBar/Logo.tsx";
 import Footer from "./components/common/footer/Footer.tsx";
 
-export default function Layout(props: { children: PropsWithChildren}) {
+export default function Layout(props: { children: PropsWithChildren }) {
   return (
-   <div id="layout">
-    <NavBar />
+    <div id="layout" class="h-screen">
+      <Logo />
 
-    <main>{props.children}</main>
+      <main>{props.children}</main>
 
-    <Footer />
-   </div>
+      <Footer />
+    </div>
   );
 }

@@ -2,11 +2,6 @@ import { tw } from "twind";
 import { Disclosure } from "headlessui";
 import Navigator from "./Navigator.tsx";
 
-const menuNavigation = [
-  { nome: "Contato", href: "/contato" },
-  { nome: "Home", href: "/" },
-];
-
 export default function Logo() {
   return (
     <div class=" mt-24">

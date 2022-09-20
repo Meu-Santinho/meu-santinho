@@ -1,6 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
-import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import tseApi, { infosCandidato } from "../clients/tse.ts";
 import GerarSantinho from "../islands/GerarSantinho.tsx";
@@ -55,7 +52,7 @@ export default function Greet(
   const deputadoestadual = props.data.infosDepEstadual;
   const deputadofederal = props.data.infosDepFederal;
   return (
-    <div class={tw`flex items-center flex`}>
+    <div class="flex items-center flex">
       <GerarSantinho
         candidatos={{ governador, deputadoestadual, senador, deputadofederal }}
       />

@@ -1,6 +1,4 @@
-/** @jsx h */
-import { h } from "preact";
-import { tw } from "@twind";
+
 
 const UFs = [
   { value: "AC", label: "Acre" },
@@ -37,7 +35,7 @@ export default function SelectHome() {
     <select
       id="select-uf"
       name="uf"
-      class={tw`mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-black focus:border-black sm:text-sm rounded-md border-1 border-black`}
+      class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-black focus:border-black sm:text-sm rounded-md border-1 border-black"
     >
       {UFs.map(({ value, label }) => (
         <option value={value} key={value}>

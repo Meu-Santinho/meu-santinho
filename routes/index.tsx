@@ -1,5 +1,3 @@
-/** @jsx h */
-import { h } from "preact";
 import { Handlers } from "$fresh/server.ts";
 import Home from "../islands/Home.tsx";
 

@@ -1,5 +1,3 @@
-/** @jsx h */
-import { Fragment, h } from "preact";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import tseApi, { Candidato } from "../clients/tse.ts";
 import Candidatos from "../islands/Candidatos.tsx";

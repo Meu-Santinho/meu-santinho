@@ -10,31 +10,44 @@ export const handler: Handlers = {
     const senador = url.searchParams.get("Senador");
     const depEstadual = url.searchParams.get("Deputado Estadual");
     const depFederal = url.searchParams.get("Deputado Federal");
-    if (!uf || !governador || !senador || !depEstadual || !depFederal) {
+    const presidente = url.searchParams.get("Presidente");
+    if (
+      !uf || !governador || !senador || !depEstadual || !depFederal ||
+      !presidente
+    ) {
       return ctx.render();
     }
 
-    const [infosGovernador, infosSenador, infosDepEstadual, infosDepFederal] =
-      await Promise.all([
-        tseApi.infosCandidato(uf, governador) as unknown as {
-          infosCandidato: infosCandidato;
-        },
-        tseApi.infosCandidato(uf, senador) as unknown as {
-          infosCandidato: infosCandidato;
-        },
-        tseApi.infosCandidato(uf, depEstadual) as unknown as {
-          infosCandidato: infosCandidato;
-        },
-        tseApi.infosCandidato(uf, depFederal) as unknown as {
-          infosCandidato: infosCandidato;
-        },
-      ]);
+    const [
+      infosGovernador,
+      infosSenador,
+      infosDepEstadual,
+      infosDepFederal,
+      infosPresidente,
+    ] = await Promise.all([
+      tseApi.infosCandidato(uf, governador) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+      tseApi.infosCandidato(uf, senador) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+      tseApi.infosCandidato(uf, depEstadual) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+      tseApi.infosCandidato(uf, depFederal) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+      tseApi.infosCandidato("BR", presidente) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+    ]);
 
     return ctx.render({
       infosGovernador,
       infosSenador,
       infosDepEstadual,
       infosDepFederal,
+      infosPresidente,
     });
   },
 };
@@ -45,16 +58,24 @@ export default function Greet(
     infosSenador: infosCandidato;
     infosDepEstadual: infosCandidato;
     infosDepFederal: infosCandidato;
-  }>
+    infosPresidente: infosCandidato;
+  }>,
 ) {
   const governador = props.data.infosGovernador;
   const senador = props.data.infosSenador;
   const deputadoestadual = props.data.infosDepEstadual;
   const deputadofederal = props.data.infosDepFederal;
+  const presidente = props.data.infosPresidente;
   return (
     <div class="flex items-center flex">
       <GerarSantinho
-        candidatos={{ governador, deputadoestadual, senador, deputadofederal }}
+        candidatos={{
+          governador,
+          deputadoestadual,
+          senador,
+          deputadofederal,
+          presidente,
+        }}
       />
     </div>
   );

@@ -58,7 +58,7 @@ export default function GerarSantinho({ candidatos }: Props) {
     {
       yNome: 1590,
       yNumero: 1715,
-      ...candidatos.governador,
+      ...candidatos.presidente,
       yImage: 1435,
     },
   ];

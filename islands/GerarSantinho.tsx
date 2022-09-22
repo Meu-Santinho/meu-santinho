@@ -1,6 +1,8 @@
 import { useEffect } from "preact/hooks";
-
 import { template } from "../utils/template.js";
+
+const SANTINHO_WIDTH = 1080;
+const SANTINHO_HEIGHT = 1920;
 
 type Cargos =
   | "governador"
@@ -18,81 +20,127 @@ export interface Props {
   candidatos: Record<Cargos, DadosCandidato>;
 }
 
-export default function GerarSantinho({ candidatos }) {
+const loadImage = (fotoUrl: string) => {
+  const candImg = new Image();
+  candImg.crossOrigin = "anonymous";
+  candImg.src = fotoUrl.replace(
+    "divulgacandcontas.tse.jus.br/",
+    "meu-santinho-proxy.deno.dev/",
+  );
+  return new Promise<typeof candImg>((res) => {
+    candImg.onload = () => {
+      res(candImg);
+    };
+  });
+};
+
+export default function GerarSantinho({ candidatos }: Props) {
+  const infosCandidatos = [
+    {
+      yNome: 165,
+      yNumero: 320,
+      ...candidatos.deputadoestadual,
+      yImage: 39,
+    },
+    {
+      yNome: 525,
+      yNumero: 670,
+      ...candidatos.deputadofederal,
+      yImage: 386,
+    },
+    { yNome: 885, yNumero: 1015, ...candidatos.senador, yImage: 732 },
+    {
+      yNome: 1230,
+      yNumero: 1370,
+      ...candidatos.governador,
+      yImage: 1084,
+    },
+    {
+      yNome: 1590,
+      yNumero: 1715,
+      ...candidatos.governador,
+      yImage: 1435,
+    },
+  ];
+
   useEffect(() => {
-    const canvas = document.createElement("canvas");
+    const drawSantinho = async () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-    canvas.width = 1080;
-    canvas.height = 1920;
-    const ctx = canvas.getContext("2d");
+      canvas.width = SANTINHO_WIDTH;
+      canvas.height = SANTINHO_HEIGHT;
 
-    // Colocar template no canva
-    const img = new Image(); // Create new img element
-    img.src = template;
+      const bg = await loadImage(template);
 
-    img.onload = () => {
-      ctx?.drawImage(img, 0, 1, 1080, 1920);
+      ctx?.drawImage(bg, 0, 1, SANTINHO_WIDTH, SANTINHO_HEIGHT);
 
-      const preencheCandidato = ({
-        yNome,
-        yNumero,
-        nomeUrna: nome,
-        numero,
-        yImage,
-        fotoUrl,
-      }) => {
-        if (!ctx) {
-          return;
-        }
+      const candidatosPromise = infosCandidatos.map(
+        async ({ yImage, yNome, yNumero, numero, nomeUrna, fotoUrl }) => {
+          const candidatoImg = await loadImage(fotoUrl);
+          if (!ctx) {
+            return;
+          }
 
-        // //img do candidato
-        // const img_candidato = new Image();
-        // img_candidato.src =
-        //   "https://meu-santinho-proxy.deno.dev/candidaturas/oficial/2022/BR/BA/546/candidatos/910005/foto.jpeg?a";
+          const preencheNomeNumero = () => {
+            ctx.fillStyle = "#FFFFFF";
+            const fontSize = nomeUrna.length > 15 ? "64" : "90";
 
-        // img_candidato.onload = () => {
-        //   ctx.drawImage(img_candidato, 0, 1, 100, 100);
-        // };
+            ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;
 
-        ctx.fillStyle = "#FFFFFF";
-        const fontSize = nome.length > 15 ? "64" : "90";
+            ctx.fillText(nomeUrna, 393, yNome);
+            ctx.fillStyle = "#004258";
+            ctx.font = `bold 128px 'Source Sans Pro'`;
 
-        ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;
+            numero
+              .toString()
+              .split("")
+              .forEach((algarismo: string, i: number) => {
+                ctx.fillText(algarismo, 410 + i * 135, yNumero);
+              });
+          };
 
-        ctx.fillText(nome, 393, yNome);
-        ctx.fillStyle = "#004258";
-        ctx.font = `bold 128px 'Source Sans Pro'`;
+          preencheNomeNumero();
 
-        numero
-          .toString()
-          .split("")
-          .forEach((algarismo, i) => {
-            ctx.fillText(algarismo, 410 + i * 135, yNumero);
-          });
-      };
-      [
-        {
-          yNome: 165,
-          yNumero: 320,
-          ...candidatos.deputadoestadual,
-          yImage: 165,
+          const drawCandidatoImage = () => {
+            const candidatoCanvas = document.createElement("canvas");
+            const ctxCandidato = candidatoCanvas.getContext("2d");
+
+            candidatoCanvas.height = 800;
+
+            if (!ctxCandidato) {
+              return;
+            }
+
+            const CIRCLE_WIDTH = 300;
+
+            ctxCandidato.drawImage(candidatoImg, 0, -2, 300, 366);
+            ctxCandidato.globalCompositeOperation = "destination-in";
+            ctxCandidato.arc(
+              CIRCLE_WIDTH / 2,
+              CIRCLE_WIDTH / 2,
+              CIRCLE_WIDTH / 2,
+              0,
+              Math.PI * 2,
+            );
+            ctxCandidato.fill();
+
+            ctx.drawImage(candidatoCanvas, 52, yImage);
+          };
+
+          drawCandidatoImage();
         },
-        {
-          yNome: 525,
-          yNumero: 670,
-          ...candidatos.deputadofederal,
-          yImage: 165,
-        },
-        { yNome: 885, yNumero: 1015, ...candidatos.senador, yImage: 165 },
-        { yNome: 1230, yNumero: 1370, ...candidatos.governador, yImage: 165 },
-        { yNome: 1590, yNumero: 1715, ...candidatos.governador, yImage: 165 },
-      ].forEach(preencheCandidato);
-      var output = new Image();
+      );
+
+      await Promise.all(candidatosPromise);
+
+      const output = new Image();
       output.src = canvas.toDataURL();
       const div = document.querySelector("#output");
       output.style.width = "100%";
       div?.appendChild(output);
     };
+    drawSantinho();
   }, []);
 
   return (
@@ -101,7 +149,8 @@ export default function GerarSantinho({ candidatos }) {
         <div
           id="output"
           style="width: 300px; height: 533px; background-color: #069;"
-        ></div>
+        >
+        </div>
       </div>
       <img />
       <button>Compartilhar</button>

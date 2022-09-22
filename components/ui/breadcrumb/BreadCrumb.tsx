@@ -1,3 +1,5 @@
+import { Fragment} from "preact";
+
 export default function Breadcrumb() {
   return (
     <Fragment aria-label="Breadcrumb">

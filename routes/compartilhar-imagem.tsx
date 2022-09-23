@@ -11,9 +11,9 @@ export const handler: Handlers = {
     const depEstadual = url.searchParams.get("Deputado Estadual");
     const depFederal = url.searchParams.get("Deputado Federal");
     const presidente = url.searchParams.get("Presidente");
+    const depDistrital = url.searchParams.get("Deputado Distrital");
     if (
-      !uf || !governador || !senador || !depEstadual || !depFederal ||
-      !presidente
+      !uf || !governador || !senador || !depFederal || !presidente
     ) {
       return ctx.render();
     }
@@ -24,6 +24,7 @@ export const handler: Handlers = {
       infosDepEstadual,
       infosDepFederal,
       infosPresidente,
+      infosDepDistrital,
     ] = await Promise.all([
       tseApi.infosCandidato(uf, governador) as unknown as {
         infosCandidato: infosCandidato;
@@ -31,13 +32,16 @@ export const handler: Handlers = {
       tseApi.infosCandidato(uf, senador) as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato(uf, depEstadual) as unknown as {
+      tseApi.infosCandidato(uf, (depEstadual ?? "")) as unknown as {
         infosCandidato: infosCandidato;
       },
       tseApi.infosCandidato(uf, depFederal) as unknown as {
         infosCandidato: infosCandidato;
       },
       tseApi.infosCandidato("BR", presidente) as unknown as {
+        infosCandidato: infosCandidato;
+      },
+      tseApi.infosCandidato(uf, (depDistrital ?? "")) as unknown as {
         infosCandidato: infosCandidato;
       },
     ]);
@@ -48,6 +52,7 @@ export const handler: Handlers = {
       infosDepEstadual,
       infosDepFederal,
       infosPresidente,
+      infosDepDistrital,
     });
   },
 };
@@ -59,6 +64,7 @@ export default function Greet(
     infosDepEstadual: infosCandidato;
     infosDepFederal: infosCandidato;
     infosPresidente: infosCandidato;
+    infosDepDistrital: infosCandidato;
   }>,
 ) {
   const governador = props.data.infosGovernador;
@@ -66,6 +72,7 @@ export default function Greet(
   const deputadoestadual = props.data.infosDepEstadual;
   const deputadofederal = props.data.infosDepFederal;
   const presidente = props.data.infosPresidente;
+  const deputadodistrital = props.data.infosDepDistrital;
   return (
     <div class="flex items-center flex">
       <GerarSantinho
@@ -75,6 +82,7 @@ export default function Greet(
           senador,
           deputadofederal,
           presidente,
+          deputadodistrital
         }}
       />
     </div>

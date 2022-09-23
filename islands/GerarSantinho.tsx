@@ -1,5 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { template } from "../utils/template.js";
+import Button from "../components/ui/button/Button.tsx";
+import Logo from "../components/common/Logo.tsx";
 
 const SANTINHO_WIDTH = 1080;
 const SANTINHO_HEIGHT = 1920;
@@ -9,6 +11,7 @@ type Cargos =
   | "presidente"
   | "deputadoestadual"
   | "deputadofederal"
+  | "deputadodistrital"
   | "senador";
 
 type DadosCandidato = {
@@ -35,11 +38,12 @@ const loadImage = (fotoUrl: string) => {
 };
 
 export default function GerarSantinho({ candidatos }: Props) {
+  
   const infosCandidatos = [
     {
       yNome: 165,
       yNumero: 320,
-      ...candidatos.deputadoestadual,
+      ...candidatos.deputadoestadual || candidatos.deputadodistrital,
       yImage: 39,
     },
     {
@@ -48,7 +52,11 @@ export default function GerarSantinho({ candidatos }: Props) {
       ...candidatos.deputadofederal,
       yImage: 386,
     },
-    { yNome: 885, yNumero: 1015, ...candidatos.senador, yImage: 732 },
+    { yNome: 885,
+      yNumero: 1015, 
+      ...candidatos.senador, 
+      yImage: 732 
+    },
     {
       yNome: 1230,
       yNumero: 1370,
@@ -62,6 +70,8 @@ export default function GerarSantinho({ candidatos }: Props) {
       yImage: 1435,
     },
   ];
+  
+
 
   useEffect(() => {
     const drawSantinho = async () => {
@@ -73,10 +83,11 @@ export default function GerarSantinho({ candidatos }: Props) {
 
       const bg = await loadImage(template);
 
-      ctx?.drawImage(bg, 0, 1, SANTINHO_WIDTH, SANTINHO_HEIGHT);
+      ctx?.drawImage(bg, 0, 0, SANTINHO_WIDTH, SANTINHO_HEIGHT);
 
       const candidatosPromise = infosCandidatos.map(
         async ({ yImage, yNome, yNumero, numero, nomeUrna, fotoUrl }) => {
+
           const candidatoImg = await loadImage(fotoUrl);
           if (!ctx) {
             return;
@@ -144,16 +155,19 @@ export default function GerarSantinho({ candidatos }: Props) {
   }, []);
 
   return (
-    <div>
-      <div style="display: flex; justify-content: center;">
+    <div class="m-auto">
+      <Logo />
+      <div>
         <div
           id="output"
-          style="width: 300px; height: 533px; background-color: #069;"
+          style="width: 300px; height: 533px; background-color: #069; margin-top:20px;"
         >
         </div>
       </div>
       <img />
-      <button>Compartilhar</button>
+      <div class="mt-5 text-center">
+        <Button type="submit">Compartilhar</Button>
+      </div>
     </div>
   );
 }

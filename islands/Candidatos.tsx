@@ -19,12 +19,20 @@ export default function Candidatos(props: {
               <input type="hidden" name="uf" value={props.uf} />
               <div class="flex flex-col ">
                 {cargos.map(({ nome, candidatos }) => (
-                  <div class="m-2 flex flex-col">
-                    <ComboBoxSelect
-                      key={nome}
-                      nome={nome}
-                      candidatos={candidatos}
-                    />
+                  <div>
+                    {props.uf === "DF" && nome === "Deputado Estadual"
+                      ? ""
+                      : props.uf !== "DF" && nome === "Deputado Distrital"
+                      ? ""
+                      : (
+                        <div class="m-2 flex flex-col">
+                          <ComboBoxSelect
+                            key={nome}
+                            nome={nome}
+                            candidatos={candidatos}
+                          />
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>

@@ -11,7 +11,7 @@ export default function Home() {
     <div>
       <Layout>
         <div class="flex items-center align-center flex-col">
-          <HeaderSection />
+          <HeaderSection title="" subTitle=""/>
           <div class="p-4 mx-auto max-w-screen-md">
             <form method="GET" action="/candidatos">
               <div class="block text-center">

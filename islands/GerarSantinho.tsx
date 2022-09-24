@@ -1,5 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { template } from "../utils/template.js";
+import Button from "../components/ui/button/Button.tsx";
+import Logo from "../components/common/Logo.tsx";
 
 const SANTINHO_WIDTH = 1080;
 const SANTINHO_HEIGHT = 1920;
@@ -9,6 +11,7 @@ type Cargos =
   | "presidente"
   | "deputadoestadual"
   | "deputadofederal"
+  | "deputadodistrital"
   | "senador";
 
 type DadosCandidato = {
@@ -16,6 +19,7 @@ type DadosCandidato = {
   fotoUrl: string;
   numero: number;
 };
+
 export interface Props {
   candidatos: Record<Cargos, DadosCandidato>;
 }
@@ -37,28 +41,32 @@ const loadImage = (fotoUrl: string) => {
 export default function GerarSantinho({ candidatos }: Props) {
   const infosCandidatos = [
     {
-      yNome: 165,
+      numeroDefault: "00000",
+      yNome: 175,
       yNumero: 320,
-      ...candidatos.deputadoestadual,
+      ...candidatos.deputadoestadual || candidatos.deputadodistrital,
       yImage: 39,
     },
     {
+      numeroDefault: "0000",
       yNome: 525,
       yNumero: 670,
       ...candidatos.deputadofederal,
       yImage: 386,
     },
-    { yNome: 885, yNumero: 1015, ...candidatos.senador, yImage: 732 },
+    {numeroDefault: "000", yNome: 865, yNumero: 1015, ...candidatos.senador, yImage: 732 },
     {
-      yNome: 1230,
+      numeroDefault: "00",
+      yNome: 1220,
       yNumero: 1370,
       ...candidatos.governador,
       yImage: 1084,
     },
     {
-      yNome: 1590,
+      numeroDefault: "00",
+      yNome: 1570,
       yNumero: 1715,
-      ...candidatos.governador,
+      ...candidatos.presidente,
       yImage: 1435,
     },
   ];
@@ -73,31 +81,35 @@ export default function GerarSantinho({ candidatos }: Props) {
 
       const bg = await loadImage(template);
 
-      ctx?.drawImage(bg, 0, 1, SANTINHO_WIDTH, SANTINHO_HEIGHT);
+      ctx?.drawImage(bg, 0, 0, SANTINHO_WIDTH, SANTINHO_HEIGHT);
 
       const candidatosPromise = infosCandidatos.map(
-        async ({ yImage, yNome, yNumero, numero, nomeUrna, fotoUrl }) => {
-          const candidatoImg = await loadImage(fotoUrl);
+        async ({ yImage, yNome, yNumero, numero, nomeUrna, fotoUrl, numeroDefault }) => {
+
+          const candidatoImg = await loadImage(fotoUrl ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCRRNhPDfP_n9gWbDrSMba6bR4dgsxSRE353R59IPfQIx_ypmeOt1sXNMKCHRmYuLPRrk&usqp=CAU");
+
           if (!ctx) {
             return;
           }
 
           const preencheNomeNumero = () => {
             ctx.fillStyle = "#FFFFFF";
-            const fontSize = nomeUrna.length > 15 ? "64" : "90";
+            // const fontSize = nomeUrna.length > 15 ? "64" : "90";
 
-            ctx.font = `bold ${fontSize}px 'Source Sans Pro'`;
+            ctx.font = `bold 70px 'Source Sans Pro'`;
 
-            ctx.fillText(nomeUrna, 393, yNome);
+            ctx.fillText(nomeUrna ?? "Não escolhido", 393, yNome);
             ctx.fillStyle = "#004258";
             ctx.font = `bold 128px 'Source Sans Pro'`;
 
-            numero
+            {numero ? numero
               .toString()
               .split("")
               .forEach((algarismo: string, i: number) => {
-                ctx.fillText(algarismo, 410 + i * 135, yNumero);
-              });
+                ctx.fillText(algarismo , 410 + i * 135, yNumero);
+              }) : numeroDefault.split("").map((_,i) => ctx.fillText("?",410 + i * 135, yNumero)) }
+
+            
           };
 
           preencheNomeNumero();
@@ -144,16 +156,19 @@ export default function GerarSantinho({ candidatos }: Props) {
   }, []);
 
   return (
-    <div>
-      <div style="display: flex; justify-content: center;">
+    <div class="m-auto">
+      <Logo />
+      <div>
         <div
           id="output"
-          style="width: 300px; height: 533px; background-color: #069;"
+          style="width: 300px; height: 533px; background-color: #069; margin-top:20px;"
         >
         </div>
       </div>
       <img />
-      <button>Compartilhar</button>
+      <div class="mt-5 text-center">
+        <Button type="submit">Compartilhar</Button>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,9 @@ const constants = {
     { nome: "Governador", codigo: 3 },
     { nome: "Senador", codigo: 5 },
     { nome: "Deputado Federal", codigo: 6 },
+    { nome: "Deputado Distrital", codigo: 8 },
     { nome: "Deputado Estadual", codigo: 7 },
+    { nome: "Presidente", codigo: 1, ufPresidente: "BR" },
     // { nome: "1º Suplente", codigo: 9 },
     // { nome: "2º Suplente", codigo: 10 },
   ],
@@ -13,11 +15,11 @@ const constants = {
 export default {
   async listarCandidatos(uf: string) {
     const candidatos = await Promise.all(
-      constants.cargos.map(async ({ codigo, nome }) => {
+      constants.cargos.map(async ({ codigo, nome, ufPresidente }) => {
         const { candidatos } = await fetch(
           `${api.baseUrl}/${
             api.routes.listarCandidatos(
-              uf,
+              ufPresidente ?? uf,
               constants.eleicao,
               `${codigo}`,
             )
@@ -34,17 +36,21 @@ export default {
   },
 
   async infosCandidato(uf: string, candidatoId: string) {
-    const infosCandidato = await fetch(
-      `${api.baseUrl}/${
-        api.routes.infosCandidato(
-          uf,
-          constants.eleicao,
-          candidatoId,
-        )
-      }`,
-    ).then((res) => res.json()).catch(console.log);
+    if (candidatoId !== "0") {
+      const infosCandidato = await fetch(
+        `${api.baseUrl}/${
+          api.routes.infosCandidato(
+            uf,
+            constants.eleicao,
+            candidatoId,
+          )
+        }`,
+      ).then((res) => res.json()).catch(console.log);
 
-    return infosCandidato;
+      return infosCandidato;
+    }
+
+    return;
   },
 };
 

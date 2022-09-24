@@ -3,6 +3,7 @@ import { Combobox } from "headlessui";
 import { Candidato } from "../../../clients/tse.ts";
 import { Fragment } from "preact";
 
+
 export default function ComboBoxSelect(props: {
   key: string;
   nome: string;

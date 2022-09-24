@@ -29,19 +29,22 @@ export const handler: Handlers = {
       tseApi.infosCandidato(uf, governador) as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato(uf, senador) as unknown as {
+      tseApi.infosCandidato(uf, senador ?? senador) as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato(uf, (depEstadual ?? "")) as unknown as {
+      tseApi.infosCandidato(uf, depEstadual ? depEstadual : "0") as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato(uf, depFederal) as unknown as {
+      tseApi.infosCandidato(uf, depFederal ?? depFederal) as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato("BR", presidente) as unknown as {
+      tseApi.infosCandidato("BR", presidente ?? presidente) as unknown as {
         infosCandidato: infosCandidato;
       },
-      tseApi.infosCandidato(uf, (depDistrital ?? "")) as unknown as {
+      tseApi.infosCandidato(
+        uf,
+        depDistrital ? depDistrital : "0",
+      ) as unknown as {
         infosCandidato: infosCandidato;
       },
     ]);
@@ -73,6 +76,7 @@ export default function Greet(
   const deputadofederal = props.data.infosDepFederal;
   const presidente = props.data.infosPresidente;
   const deputadodistrital = props.data.infosDepDistrital;
+
   return (
     <div class="flex items-center flex">
       <GerarSantinho
@@ -82,7 +86,7 @@ export default function Greet(
           senador,
           deputadofederal,
           presidente,
-          deputadodistrital
+          deputadodistrital,
         }}
       />
     </div>

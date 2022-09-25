@@ -151,13 +151,14 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
 
             const CIRCLE_WIDTH = 212.5;
 
-            ctxCandidato.drawImage(
-              candidatoImg,
-              0,
-              -2,
-              CIRCLE_WIDTH,
-              (CIRCLE_WIDTH * 366) / 300
-            );
+            candidatoImg &&
+              ctxCandidato.drawImage(
+                candidatoImg,
+                0,
+                -2,
+                CIRCLE_WIDTH,
+                (CIRCLE_WIDTH * 366) / 300
+              );
             ctxCandidato.globalCompositeOperation = "destination-in";
             ctxCandidato.arc(
               CIRCLE_WIDTH / 2,
@@ -224,10 +225,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
   };
 
   return (
-    <div class="m-auto mt-3">
-      <a href="/">
-        <Logo />
-      </a>
+    <div class="m-auto">
       <div class="flex justify-center">
         <div
           id="output"

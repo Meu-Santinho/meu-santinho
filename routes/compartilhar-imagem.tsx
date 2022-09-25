@@ -1,6 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import tseApi, { infosCandidato } from "../clients/tse.ts";
 import GerarSantinho from "../islands/GerarSantinho.tsx";
+import Layout from "../Layout.tsx";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
@@ -78,18 +79,20 @@ export default function Greet(
   const deputadodistrital = props.data.infosDepDistrital;
 
   return (
-    <div class="flex items-center flex">
-      <GerarSantinho
-        uf={props.data.uf}
-        candidatos={{
-          governador,
-          deputadoestadual,
-          senador,
-          deputadofederal,
-          presidente,
-          deputadodistrital,
-        }}
-      />
-    </div>
+    <Layout>
+      <div class="flex items-center flex">
+        <GerarSantinho
+          uf={props.data.uf}
+          candidatos={{
+            governador,
+            deputadoestadual,
+            senador,
+            deputadofederal,
+            presidente,
+            deputadodistrital,
+          }}
+        />
+      </div>
+    </Layout>
   );
 }

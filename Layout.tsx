@@ -5,7 +5,7 @@ import Footer from "./components/common/footer/Footer.tsx";
 export default function Layout(props: { children: PropsWithChildren }) {
   return (
     <div id="layout" class="h-screen">
-      <div class=" mt-24">
+      <div class="mt-12">
         <Logo />
       </div>
 

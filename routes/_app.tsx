@@ -6,7 +6,10 @@ export default function App(props: AppProps) {
     <>
       <Head>
         <title>Meu Santinho - Gere o seu e compartilhe online</title>
-        <meta name="title" content="Meu Santinho - Gere seu santinho e compartilhe online" />
+        <meta
+          name="title"
+          content="Meu Santinho - Gere seu santinho e compartilhe online"
+        />
         <meta
           name="description"
           content="Preencha com os candidatos que você já escolheu que vai votar nas eleições de 2022. Compartilhe seu santinho no Instagram."
@@ -17,16 +20,27 @@ export default function App(props: AppProps) {
         </style>
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://meusantinho.app/" />
-        <meta property="og:title" content="Meu Santinho - Gere seu santinho virtual" />
+        <meta
+          property="og:title"
+          content="Meu Santinho - Gere seu santinho virtual"
+        />
         <meta
           property="og:description"
-          content="Preencha com os candidatos que você já escolheu que vai votar nas eleições de 2022. Compartilhe seu santinho no Instagram."
+          content="Preencha com os candidatos que você já escolheu que vai votar nas eleições de 2022. Compartilhe seu santinho nas redes."
         />
         <meta property="og:image" content={asset(`/zapzap.png`)} />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://meusantinho.app/" />
-        <meta property="twitter:title" content="Meu Santinho - Gere seu santinho online" />
+        <meta
+          property="twitter:title"
+          content="Meu Santinho - Gere seu santinho virtual"
+        />
         <meta property="twitter:image" content={asset(`/zapzap.png`)} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Meu Santinho - Gere seu santinho virtual" />
+        <meta name="twitter:description" content="Preencha com os candidatos que você já escolheu que vai votar nas eleições de 2022. Compartilhe seu santinho nas redes.0" />
+        <meta name="twitter:image" content={asset('/twitter.png')} />
 
         <meta
           property="twitter:description"

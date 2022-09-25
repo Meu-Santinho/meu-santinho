@@ -12,7 +12,7 @@ export default function Candidatos(props: {
 
   return (
     <Layout>
-      <div class="items-center align-center text-center my-8">
+      <div class="items-center text-center my-8">
         <div class="max-w-7xl mx-auto py-4 px-8 sm:px-16 md:px-64 lg:px-96">
           <div class="text-center">
             <form autocomplete="off" action={`/compartilhar-imagem`}>

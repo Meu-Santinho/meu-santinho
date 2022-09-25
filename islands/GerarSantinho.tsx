@@ -206,8 +206,8 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
       }
       const files = [new File([blob], "meu-santinho.png", { type: blob.type })];
       const shareData = {
-        text: "Confira meu santinho!",
-        title: "Gere seu santinho online em https://meusantinho.app/",
+        // text: "Confira meu santinho!",
+        // title: "Gere seu santinho online em https://meusantinho.app/",
         files,
       };
       if (navigator.share) {

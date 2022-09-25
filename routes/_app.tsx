@@ -33,7 +33,7 @@ export default function App(props: AppProps) {
         {/* TODO: logos */}
         <meta property="twitter:image" content={asset(`/logo.png`)} />
         <meta name="theme-color" content="#3c31dd" />
-        <link rel="icon" type="image/svg" href={asset("/logo.svg")} />
+        <link rel="icon" type="image/png" href={asset("/favicon.png")} />
       </Head>
       <props.Component />
     </>

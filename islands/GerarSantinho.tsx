@@ -43,35 +43,35 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const infosCandidatos = [
     {
-      numeroDefault: "00000",
+      numeroDefault: "?????",
       yNome: 175 + 60,
       yNumero: 320 + 65,
       ...(candidatos.deputadoestadual || candidatos.deputadodistrital),
       yImage: 225,
     },
     {
-      numeroDefault: "0000",
+      numeroDefault: "????",
       yNome: 525 + 50,
       yNumero: 670 + 45,
       ...candidatos.deputadofederal,
       yImage: 556,
     },
     {
-      numeroDefault: "000",
+      numeroDefault: "???",
       yNome: 865 + 35,
       yNumero: 1015 + 35,
       ...candidatos.senador,
       yImage: 886,
     },
     {
-      numeroDefault: "00",
+      numeroDefault: "??",
       yNome: 1220 + 40,
       yNumero: 1370 + 40,
       ...candidatos.governador,
       yImage: 1247.5,
     },
     {
-      numeroDefault: "00",
+      numeroDefault: "??",
       yNome: 1570 + 35,
       yNumero: 1715 + 30,
       ...candidatos.presidente,
@@ -101,21 +101,20 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
           fotoUrl,
           numeroDefault,
         }) => {
-          const candidatoImg = await loadImage(
-            fotoUrl ??
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCRRNhPDfP_n9gWbDrSMba6bR4dgsxSRE353R59IPfQIx_ypmeOt1sXNMKCHRmYuLPRrk&usqp=CAU"
-          );
+          const candidatoImg = fotoUrl ? await loadImage(fotoUrl) : null;
 
           if (!ctx) {
             return;
           }
 
           const preencheNomeNumero = () => {
-            ctx.fillStyle = "#704FCC";
+            ctx.fillStyle = nomeUrna ? "#704FCC" : "#666";
+
+            const nomeToDraw = nomeUrna ?? "Não escolhido(a)";
             const fontSizeNome = (() => {
-              if (nomeUrna.length < 5) {
+              if (nomeToDraw.length < 5) {
                 return "100";
-              } else if (nomeUrna.length < 16) {
+              } else if (nomeToDraw.length < 16) {
                 return "75";
               } else {
                 return "58";
@@ -124,8 +123,8 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
 
             ctx.font = `bold ${fontSizeNome}px 'Source Sans Pro'`;
 
-            ctx.fillText(nomeUrna ?? "Não escolhido", 372, yNome);
-            ctx.fillStyle = "#000";
+            ctx.fillText(nomeToDraw, 372, yNome);
+            ctx.fillStyle = nomeUrna ? "#000" : "#666";
             ctx.font = `bold 128px 'Source Sans Pro'`;
 
             const numeroToDraw = numero ? numero.toString() : numeroDefault;
@@ -172,7 +171,9 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
             ctx.drawImage(candidatoCanvas, 83, yImage);
           };
 
-          drawCandidatoImage();
+          if (candidatoImg) {
+            drawCandidatoImage();
+          }
         }
       );
 
@@ -223,9 +224,11 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
   };
 
   return (
-    <div class="m-auto">
-      <Logo />
-      <div>
+    <div class="m-auto mt-3">
+      <a href="/">
+        <Logo />
+      </a>
+      <div class="flex justify-center">
         <div
           id="output"
           style="width: 300px; height: 533px;  margin-top:20px;"
@@ -233,10 +236,33 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
       </div>
       <img />
       <div class="mt-5 text-center">
-        {/* @ts-expect-error */}
-        <Button type="submit" onClick={() => compartilharImagem()}>
-          Compartilhar
-        </Button>
+        <div class="flex flex-row justify-center">
+          {/* @ts-expect-error */}
+          <Button type="submit" onClick={() => compartilharImagem()}>
+            Compartilhar
+          </Button>
+          <a
+            href="/"
+            class="ml-3 inline-flex items-center px-3 py-2 border border-black shadow-sm text-sm leading-4 font-medium rounded-md text-black bg-transparent hover:bg-gray-400  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Voltar ao Início
+          </a>
+        </div>
+        <div class="flex flex-col items-center mt-3">
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Copie o link
+          </label>
+
+          <input
+            id="url"
+            type="text"
+            onFocus={(e) => {
+              e.currentTarget.select();
+            }}
+            value={window?.location?.href}
+            class="p-2 block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md"
+          />
+        </div>
       </div>
     </div>
   );

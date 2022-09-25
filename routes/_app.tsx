@@ -29,13 +29,6 @@ export default function App(props: AppProps) {
           content="Preencha com os candidatos que você já escolheu que vai votar nas eleições de 2022. Compartilhe seu santinho nas redes."
         />
         <meta property="og:image" content={asset(`/zapzap.png`)} />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://meusantinho.app/" />
-        <meta
-          property="twitter:title"
-          content="Meu Santinho - Gere seu santinho virtual"
-        />
-        <meta property="twitter:image" content={asset(`/zapzap.png`)} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Meu Santinho - Gere seu santinho virtual" />

@@ -29,7 +29,7 @@ const loadImage = (fotoUrl: string) => {
   candImg.crossOrigin = "anonymous";
   candImg.src = fotoUrl.replace(
     "divulgacandcontas.tse.jus.br/",
-    "meu-santinho-proxy.deno.dev/",
+    "meu-santinho-proxy.deno.dev/"
   );
   return new Promise<typeof candImg>((res) => {
     candImg.onload = () => {
@@ -44,7 +44,7 @@ export default function GerarSantinho({ candidatos }: Props) {
       numeroDefault: "00000",
       yNome: 175,
       yNumero: 320,
-      ...candidatos.deputadoestadual || candidatos.deputadodistrital,
+      ...(candidatos.deputadoestadual || candidatos.deputadodistrital),
       yImage: 39,
     },
     {
@@ -54,7 +54,13 @@ export default function GerarSantinho({ candidatos }: Props) {
       ...candidatos.deputadofederal,
       yImage: 386,
     },
-    {numeroDefault: "000", yNome: 865, yNumero: 1015, ...candidatos.senador, yImage: 732 },
+    {
+      numeroDefault: "000",
+      yNome: 865,
+      yNumero: 1015,
+      ...candidatos.senador,
+      yImage: 732,
+    },
     {
       numeroDefault: "00",
       yNome: 1220,
@@ -84,9 +90,19 @@ export default function GerarSantinho({ candidatos }: Props) {
       ctx?.drawImage(bg, 0, 0, SANTINHO_WIDTH, SANTINHO_HEIGHT);
 
       const candidatosPromise = infosCandidatos.map(
-        async ({ yImage, yNome, yNumero, numero, nomeUrna, fotoUrl, numeroDefault }) => {
-
-          const candidatoImg = await loadImage(fotoUrl ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCRRNhPDfP_n9gWbDrSMba6bR4dgsxSRE353R59IPfQIx_ypmeOt1sXNMKCHRmYuLPRrk&usqp=CAU");
+        async ({
+          yImage,
+          yNome,
+          yNumero,
+          numero,
+          nomeUrna,
+          fotoUrl,
+          numeroDefault,
+        }) => {
+          const candidatoImg = await loadImage(
+            fotoUrl ??
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCRRNhPDfP_n9gWbDrSMba6bR4dgsxSRE353R59IPfQIx_ypmeOt1sXNMKCHRmYuLPRrk&usqp=CAU"
+          );
 
           if (!ctx) {
             return;
@@ -94,22 +110,36 @@ export default function GerarSantinho({ candidatos }: Props) {
 
           const preencheNomeNumero = () => {
             ctx.fillStyle = "#FFFFFF";
-            // const fontSize = nomeUrna.length > 15 ? "64" : "90";
+            const fontSize = nomeUrna.length > 15 ? "64" : "90";
 
-            ctx.font = `bold 70px 'Source Sans Pro'`;
+            const fontSizeNome = (() => {
+              if (nomeUrna.length < 5) {
+                return "100";
+              } else if (nomeUrna.length < 16) {
+                return "75";
+              } else {
+                return "58";
+              }
+            })();
+
+            ctx.font = `bold ${fontSizeNome}px 'Source Sans Pro'`;
 
             ctx.fillText(nomeUrna ?? "Não escolhido", 393, yNome);
             ctx.fillStyle = "#004258";
             ctx.font = `bold 128px 'Source Sans Pro'`;
 
-            {numero ? numero
-              .toString()
-              .split("")
-              .forEach((algarismo: string, i: number) => {
-                ctx.fillText(algarismo , 410 + i * 135, yNumero);
-              }) : numeroDefault.split("").map((_,i) => ctx.fillText("?",410 + i * 135, yNumero)) }
-
-            
+            {
+              numero
+                ? numero
+                    .toString()
+                    .split("")
+                    .forEach((algarismo: string, i: number) => {
+                      ctx.fillText(algarismo, 410 + i * 135, yNumero);
+                    })
+                : numeroDefault
+                    .split("")
+                    .map((_, i) => ctx.fillText("?", 410 + i * 135, yNumero));
+            }
           };
 
           preencheNomeNumero();
@@ -133,7 +163,7 @@ export default function GerarSantinho({ candidatos }: Props) {
               CIRCLE_WIDTH / 2,
               CIRCLE_WIDTH / 2,
               0,
-              Math.PI * 2,
+              Math.PI * 2
             );
             ctxCandidato.fill();
 
@@ -141,7 +171,7 @@ export default function GerarSantinho({ candidatos }: Props) {
           };
 
           drawCandidatoImage();
-        },
+        }
       );
 
       await Promise.all(candidatosPromise);
@@ -162,8 +192,7 @@ export default function GerarSantinho({ candidatos }: Props) {
         <div
           id="output"
           style="width: 300px; height: 533px; background-color: #069; margin-top:20px;"
-        >
-        </div>
+        ></div>
       </div>
       <img />
       <div class="mt-5 text-center">

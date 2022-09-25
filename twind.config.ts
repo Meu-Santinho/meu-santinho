@@ -23,5 +23,9 @@ export default {
       yellow: colors.yellow,
       transparent: "transparent",
     },
+    fontFamily: {
+      sans: ['Source Sans Pro'],
+      serif: ['inherit']
+    }
   },
 } as Options;

@@ -6,7 +6,7 @@ const navigation = {
   ],
   designer: [
     { id: "Victória Molgado", href: "https://github.com/lucis" },
-    { id: "Victor Soares", href: "https://github.com/marianacoimbra" },
+    { id: "Victor Soares", href: "https://behance.net/victorsrs" },
   ],
   social: [
     {

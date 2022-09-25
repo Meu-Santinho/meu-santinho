@@ -1,5 +1,5 @@
-import { useEffect } from "preact/hooks";
-import { template } from "../utils/template.js";
+import { useEffect, useState } from "preact/hooks";
+import { bgNormal, bgDf } from "../utils/bgImages.ts";
 import Button from "../components/ui/button/Button.tsx";
 import Logo from "../components/common/Logo.tsx";
 
@@ -21,6 +21,7 @@ type DadosCandidato = {
 };
 
 export interface Props {
+  uf: string;
   candidatos: Record<Cargos, DadosCandidato>;
 }
 
@@ -38,42 +39,43 @@ const loadImage = (fotoUrl: string) => {
   });
 };
 
-export default function GerarSantinho({ candidatos }: Props) {
+export default function GerarSantinho({ candidatos, uf }: Props) {
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const infosCandidatos = [
     {
       numeroDefault: "00000",
-      yNome: 175,
-      yNumero: 320,
+      yNome: 175 + 60,
+      yNumero: 320 + 65,
       ...(candidatos.deputadoestadual || candidatos.deputadodistrital),
-      yImage: 39,
+      yImage: 225,
     },
     {
       numeroDefault: "0000",
-      yNome: 525,
-      yNumero: 670,
+      yNome: 525 + 50,
+      yNumero: 670 + 45,
       ...candidatos.deputadofederal,
-      yImage: 386,
+      yImage: 556,
     },
     {
       numeroDefault: "000",
-      yNome: 865,
-      yNumero: 1015,
+      yNome: 865 + 35,
+      yNumero: 1015 + 35,
       ...candidatos.senador,
-      yImage: 732,
+      yImage: 886,
     },
     {
       numeroDefault: "00",
-      yNome: 1220,
-      yNumero: 1370,
+      yNome: 1220 + 40,
+      yNumero: 1370 + 40,
       ...candidatos.governador,
-      yImage: 1084,
+      yImage: 1247.5,
     },
     {
       numeroDefault: "00",
-      yNome: 1570,
-      yNumero: 1715,
+      yNome: 1570 + 35,
+      yNumero: 1715 + 30,
       ...candidatos.presidente,
-      yImage: 1435,
+      yImage: 1579,
     },
   ];
 
@@ -85,7 +87,7 @@ export default function GerarSantinho({ candidatos }: Props) {
       canvas.width = SANTINHO_WIDTH;
       canvas.height = SANTINHO_HEIGHT;
 
-      const bg = await loadImage(template);
+      const bg = await loadImage(uf === "DF" ? bgDf : bgNormal);
 
       ctx?.drawImage(bg, 0, 0, SANTINHO_WIDTH, SANTINHO_HEIGHT);
 
@@ -109,9 +111,7 @@ export default function GerarSantinho({ candidatos }: Props) {
           }
 
           const preencheNomeNumero = () => {
-            ctx.fillStyle = "#FFFFFF";
-            const fontSize = nomeUrna.length > 15 ? "64" : "90";
-
+            ctx.fillStyle = "#704FCC";
             const fontSizeNome = (() => {
               if (nomeUrna.length < 5) {
                 return "100";
@@ -124,22 +124,18 @@ export default function GerarSantinho({ candidatos }: Props) {
 
             ctx.font = `bold ${fontSizeNome}px 'Source Sans Pro'`;
 
-            ctx.fillText(nomeUrna ?? "Não escolhido", 393, yNome);
-            ctx.fillStyle = "#004258";
+            ctx.fillText(nomeUrna ?? "Não escolhido", 372, yNome);
+            ctx.fillStyle = "#000";
             ctx.font = `bold 128px 'Source Sans Pro'`;
 
-            {
-              numero
-                ? numero
-                    .toString()
-                    .split("")
-                    .forEach((algarismo: string, i: number) => {
-                      ctx.fillText(algarismo, 410 + i * 135, yNumero);
-                    })
-                : numeroDefault
-                    .split("")
-                    .map((_, i) => ctx.fillText("?", 410 + i * 135, yNumero));
-            }
+            const numeroToDraw = numero ? numero.toString() : numeroDefault;
+
+            numeroToDraw
+              .toString()
+              .split("")
+              .forEach((algarismo: string, i: number) => {
+                ctx.fillText(algarismo, 390 + i * 110, yNumero);
+              });
           };
 
           preencheNomeNumero();
@@ -154,9 +150,15 @@ export default function GerarSantinho({ candidatos }: Props) {
               return;
             }
 
-            const CIRCLE_WIDTH = 300;
+            const CIRCLE_WIDTH = 212.5;
 
-            ctxCandidato.drawImage(candidatoImg, 0, -2, 300, 366);
+            ctxCandidato.drawImage(
+              candidatoImg,
+              0,
+              -2,
+              CIRCLE_WIDTH,
+              (CIRCLE_WIDTH * 366) / 300
+            );
             ctxCandidato.globalCompositeOperation = "destination-in";
             ctxCandidato.arc(
               CIRCLE_WIDTH / 2,
@@ -167,7 +169,7 @@ export default function GerarSantinho({ candidatos }: Props) {
             );
             ctxCandidato.fill();
 
-            ctx.drawImage(candidatoCanvas, 52, yImage);
+            ctx.drawImage(candidatoCanvas, 83, yImage);
           };
 
           drawCandidatoImage();
@@ -177,7 +179,11 @@ export default function GerarSantinho({ candidatos }: Props) {
       await Promise.all(candidatosPromise);
 
       const output = new Image();
+      output.style.borderRadius = "20px";
+      output.style.border = "3px solid #704FCC";
+
       output.src = canvas.toDataURL();
+      setCanvas(canvas);
       const div = document.querySelector("#output");
       output.style.width = "100%";
       div?.appendChild(output);
@@ -185,18 +191,52 @@ export default function GerarSantinho({ candidatos }: Props) {
     drawSantinho();
   }, []);
 
+  const compartilharImagem = () => {
+    if (!canvas) {
+      return;
+    }
+
+    canvas.toBlob(async (blob) => {
+      // Even if you want to share just one file you need to
+      // send them as an array of files.
+      if (!blob) {
+        return;
+      }
+      const files = [new File([blob], "meu-santinho.png", { type: blob.type })];
+      const shareData = {
+        text: "Confira meu santinho!",
+        title: "Gere seu santinho online em https://meusantinho.app/",
+        files,
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            console.error(err.name, err.message);
+          }
+        }
+      } else {
+        console.warn("Sharing not supported", shareData);
+      }
+    });
+  };
+
   return (
     <div class="m-auto">
       <Logo />
       <div>
         <div
           id="output"
-          style="width: 300px; height: 533px; background-color: #069; margin-top:20px;"
+          style="width: 300px; height: 533px;  margin-top:20px;"
         ></div>
       </div>
       <img />
       <div class="mt-5 text-center">
-        <Button type="submit">Compartilhar</Button>
+        {/* @ts-expect-error */}
+        <Button type="submit" onClick={() => compartilharImagem()}>
+          Compartilhar
+        </Button>
       </div>
     </div>
   );

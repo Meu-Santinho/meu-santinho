@@ -1,17 +1,14 @@
-import Modal from "../components/ui/modal/Modal.tsx";
 import Button from "../components/ui/button/Button.tsx";
 import SelectUF from "../components/ui/select/SelectUF.tsx";
 import Layout from "../Layout.tsx";
-import Hero from "../components/ui/hero/Hero.tsx";
 import HeaderSection from "../components/ui/headerSection/HeaderSection.tsx";
-import Breadcrumb from "../components/ui/breadcrumb/BreadCrumb.tsx";
 
 export default function Home() {
   return (
     <div>
       <Layout>
-        <div class="flex items-center align-center flex-col">
-          <HeaderSection title="" subTitle=""/>
+        <div class="flex items-center flex-col">
+          <HeaderSection title="" subTitle="" />
           <div class="p-4 mx-auto max-w-screen-md">
             <form method="GET" action="/candidatos">
               <div class="block text-center">

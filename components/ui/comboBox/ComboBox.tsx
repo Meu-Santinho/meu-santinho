@@ -67,13 +67,13 @@ export default function ComboBoxSelect(props: {
                 <Combobox.Option
                   key={candidato.id}
                   value={candidato.id}
-                  class="relative cursor-pointer select-none py-2 pl-8 pr-4 text-black font-semibold text-lg hover:bg-gray-200 text-left"
+                  class="relative cursor-pointer select-none text-black font-semibold text-lg hover:bg-gray-200 text-left"
                 >
                   {/* @ts-expect-error: erro */}
                   {({ active, selected }: any) => (
                     <Fragment>
                       <li
-                        class={`${
+                        class={`py-2 pl-2 pr-2 ${
                           active
                             ? "bg-black text-white "
                             : "bg-white text-black "

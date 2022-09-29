@@ -37,7 +37,7 @@ export default function Candidatos(props: {
                 ))}
               </div>
               <div class="mt-10">
-                <Button type="submit">Gerar Imagens</Button>
+                <Button type="submit">Gerar Santinho</Button>
               </div>
             </form>
           </div>

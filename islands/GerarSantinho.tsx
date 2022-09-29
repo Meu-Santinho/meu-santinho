@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { bgNormal, bgDf } from "../utils/bgImages.ts";
+import { bgDf, bgNormal } from "../utils/bgImages.ts";
 import Button from "../components/ui/button/Button.tsx";
 import Logo from "../components/common/Logo.tsx";
 
@@ -30,7 +30,7 @@ const loadImage = (fotoUrl: string) => {
   candImg.crossOrigin = "anonymous";
   candImg.src = fotoUrl.replace(
     "divulgacandcontas.tse.jus.br/",
-    "meu-santinho-proxy.deno.dev/"
+    "meu-santinho-proxy.deno.dev/",
   );
   return new Promise<typeof candImg>((res) => {
     candImg.onload = () => {
@@ -43,17 +43,17 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const infosCandidatos = [
     {
-      numeroDefault: "?????",
+      numeroDefault: "????",
       yNome: 175 + 60,
       yNumero: 320 + 65,
-      ...(candidatos.deputadoestadual || candidatos.deputadodistrital),
+      ...candidatos.deputadofederal,
       yImage: 225,
     },
     {
-      numeroDefault: "????",
+      numeroDefault: "?????",
       yNome: 525 + 50,
       yNumero: 670 + 45,
-      ...candidatos.deputadofederal,
+      ...(candidatos.deputadoestadual || candidatos.deputadodistrital),
       yImage: 556,
     },
     {
@@ -157,7 +157,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
                 0,
                 -2,
                 CIRCLE_WIDTH,
-                (CIRCLE_WIDTH * 366) / 300
+                (CIRCLE_WIDTH * 366) / 300,
               );
             ctxCandidato.globalCompositeOperation = "destination-in";
             ctxCandidato.arc(
@@ -165,7 +165,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
               CIRCLE_WIDTH / 2,
               CIRCLE_WIDTH / 2,
               0,
-              Math.PI * 2
+              Math.PI * 2,
             );
             ctxCandidato.fill();
 
@@ -175,7 +175,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
           if (candidatoImg) {
             drawCandidatoImage();
           }
-        }
+        },
       );
 
       await Promise.all(candidatosPromise);
@@ -228,7 +228,8 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
         <div
           id="output"
           style="width: 300px; height: 533px;  margin-top:20px;"
-        ></div>
+        >
+        </div>
       </div>
       <img />
       <div class="mt-5 text-center">

@@ -1,10 +1,10 @@
 const constants = {
   cargos: [
-    { nome: "Governador", codigo: 3 },
-    { nome: "Senador", codigo: 5 },
     { nome: "Deputado Federal", codigo: 6 },
-    { nome: "Deputado Distrital", codigo: 8 },
     { nome: "Deputado Estadual", codigo: 7 },
+    { nome: "Deputado Distrital", codigo: 8 },
+    { nome: "Senador", codigo: 5 },
+    { nome: "Governador", codigo: 3 },
     { nome: "Presidente", codigo: 1, ufPresidente: "BR" },
     // { nome: "1º Suplente", codigo: 9 },
     // { nome: "2º Suplente", codigo: 10 },

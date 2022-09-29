@@ -8,7 +8,7 @@ Acesse em: https://meusantinho.app
 
 ## Tecnologia
 
-Este projeto é desenvolvido em Typescript com [Deno](https://deno.land/) e utiliza o framework [Fresh](https://fresh.deno.land/).
+Este projeto é desenvolvido em Typescript com [Deno](https://deno.land/) e utiliza o framework [Fresh](https://fresh.deno.dev/).
 
 ## Como funciona
 

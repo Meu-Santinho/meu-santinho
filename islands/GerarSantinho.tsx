@@ -116,8 +116,10 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
                 return "100";
               } else if (nomeToDraw.length < 16) {
                 return "75";
-              } else {
+              } else if (nomeToDraw.length < 22) {
                 return "58";
+              } else {
+                return "42";
               }
             })();
 

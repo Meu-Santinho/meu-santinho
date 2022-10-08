@@ -112,18 +112,14 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
 
             const nomeToDraw = nomeUrna ?? "Não escolhido(a)";
             const fontSizeNome = (() => {
-              if (nomeToDraw.length < 5) {
-                return "100";
-              } else if (nomeToDraw.length < 16) {
-                return "75";
-              } else {
-                return "58";
-              }
+
+              return `${600 - (nomeToDraw.length / 600)}`
+              
             })();
 
-            ctx.font = `bold ${fontSizeNome}px 'Source Sans Pro'`;
+            ctx.font = `bold ${fontSizeNome}% 'Source Sans Pro'`;
 
-            ctx.fillText(nomeToDraw, 372, yNome);
+            ctx.fillText(nomeToDraw, 372, yNome, 600);
             ctx.fillStyle = nomeUrna ? "#000" : "#666";
             ctx.font = `bold 128px 'Source Sans Pro'`;
 

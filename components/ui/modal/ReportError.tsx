@@ -89,7 +89,7 @@ const ModalInner = () => {
               htmlFor="comment"
               className="block text-xl font-medium text-gray-700"
             >
-              Escreva o erro no campo abaixo
+              Escreva o erro no campo abaixo!
             </label>
             <div className="mt-1">
               <textarea

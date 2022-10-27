@@ -255,7 +255,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
           />
         </div>
         <div class="mt-10">
-          <label class="block text-sm font-medium text-gray-700">
+          <label class="block text-md font-medium text-gray-700">
             Aconteceu algum erro?
           </label>
           <div class="mt-2">

@@ -3,6 +3,7 @@ import ComboBoxSelect from "../components/ui/comboBox/ComboBox.tsx";
 import HeaderSection from "../components/ui/headerSection/HeaderSection.tsx";
 import Button from "../components/ui/button/Button.tsx";
 import Layout from "../Layout.tsx";
+import ReportError from "../components/ui/modal/ReportError.tsx"
 
 export default function Candidatos(props: {
   uf: string;
@@ -40,6 +41,14 @@ export default function Candidatos(props: {
                 <Button type="submit">Gerar Santinho</Button>
               </div>
             </form>
+            <div class="mt-10">
+              <label class="block text-md font-medium text-gray-700">
+                Aconteceu algum erro?
+              </label>
+              <div class="mt-2">
+                <ReportError />
+              </div>
+            </div>
           </div>
         </div>
       </div>

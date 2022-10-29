@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { bgDf, bgNormal } from "../utils/bgImages.ts";
 import Button from "../components/ui/button/Button.tsx";
-import Logo from "../components/common/Logo.tsx";
+import ReportError from "../components/ui/modal/ReportError.tsx";
 
 const SANTINHO_WIDTH = 1080;
 const SANTINHO_HEIGHT = 1920;
@@ -112,9 +112,7 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
 
             const nomeToDraw = nomeUrna ?? "Não escolhido(a)";
             const fontSizeNome = (() => {
-
-              return `${600 - (nomeToDraw.length / 600)}`
-              
+              return `${600 - (nomeToDraw.length / 600)}`;
             })();
 
             ctx.font = `bold ${fontSizeNome}% 'Source Sans Pro'`;
@@ -255,6 +253,14 @@ export default function GerarSantinho({ candidatos, uf }: Props) {
             value={window?.location?.href}
             class="p-2 block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 border rounded-md"
           />
+        </div>
+        <div class="mt-10">
+          <label class="block text-md font-medium text-gray-700">
+            Aconteceu algum erro?
+          </label>
+          <div class="mt-2">
+            <ReportError />
+          </div>
         </div>
       </div>
     </div>

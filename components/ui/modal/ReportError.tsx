@@ -87,7 +87,7 @@ const ModalInner = () => {
           <div>
             <label
               htmlFor="comment"
-              className="block text-2xl font-medium text-gray-700"
+              className="block text-2xl font-medium text-black"
             >
               Escreva o erro no campo abaixo!
             </label>

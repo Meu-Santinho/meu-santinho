@@ -109,6 +109,18 @@ test('renders the empty template with six equal cards in official order', async 
     && ['Nome Técnico', 'XX', '0123'].includes(args[0])), false);
 });
 
+test('keeps the upper decorative circle separate from the 2026 chip', async () => {
+  const ctx = recordingContext();
+  await renderStory(ctx, { uf: 'BA' }, { logo });
+
+  const upperCircle = ctx.calls.find(({ method, args }) => (
+    method === 'arc' && args[0] > 900
+  ));
+  assert.ok(upperCircle);
+  const [, centerY, radius] = upperCircle.args;
+  assert.ok(centerY + radius <= 145);
+});
+
 test('uses the district label only for DF', async () => {
   const ctx = recordingContext();
   await renderStory(ctx, { uf: 'DF' }, { logo });

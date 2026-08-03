@@ -76,7 +76,7 @@ function drawDecorations(ctx) {
   ctx.save();
   ctx.fillStyle = COLORS.yellow;
   ctx.beginPath();
-  ctx.arc(1022, 48, 164, 0, Math.PI * 2);
+  ctx.arc(1080, 0, 130, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = COLORS.green;

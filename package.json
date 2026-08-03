@@ -4,13 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/brand/*.test.mjs",
+    "test": "node --test test/brand/*.test.mjs test/story/*.test.mjs",
     "brand:svg": "node scripts/brand/build-svg.mjs",
     "brand:png": "node scripts/brand/render-png.mjs",
     "brand:sheet": "node scripts/brand/build-sheet.mjs",
-    "brand:verify": "npm test && npm run brand:svg && npm run brand:png && npm run brand:sheet && npm test"
+    "brand:verify": "npm test && npm run brand:svg && npm run brand:png && npm run brand:sheet && npm test",
+    "story:empty": "node scripts/story/render-demo.mjs --empty",
+    "story:demo": "node scripts/story/render-demo.mjs",
+    "story:verify": "npm test && npm run story:empty && npm run story:demo && npm test"
   },
   "dependencies": {
+    "@napi-rs/canvas": "1.0.3",
     "fontkit": "2.0.4",
     "sharp": "0.35.3",
     "svgo": "4.0.2"

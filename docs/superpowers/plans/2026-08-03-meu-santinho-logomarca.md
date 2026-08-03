@@ -392,7 +392,7 @@ const jobs = [
 ];
 ```
 
-SVGO configuration must set `removeViewBox: false`, `cleanupIds: false` and disable any plugin that removes `data-component` or `data-part` attributes.
+SVGO 4 configuration must set `cleanupIds: false`, retain the default omission of the standalone `removeViewBox` plugin, and disable any plugin that removes `data-component` or `data-part` attributes. The separate `removeDimensions` plugin preserves an existing `viewBox`.
 
 - [ ] **Step 4: Build and test all SVGs**
 

@@ -267,7 +267,7 @@ Implement the reusable outlining helper and wordmark wrapper with this contract.
 
 ```js
 // brand/source/wordmark.mjs
-import fontkit from 'fontkit';
+import * as fontkit from 'fontkit';
 import { COLORS } from './tokens.mjs';
 
 const baseFont = fontkit.openSync('brand/source/fonts/Nunito[wght].ttf');

@@ -1,7 +1,7 @@
 # Meu Santinho — Especificação do story eleitoral
 
 **Data:** 3 de agosto de 2026  
-**Status:** conceito visual aprovado; especificação aguardando revisão final  
+**Status:** aprovado para implementação
 **Escopo:** template vazio de story e contrato futuro de renderização pela Canvas API
 
 ## 1. Objetivo

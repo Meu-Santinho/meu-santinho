@@ -1,5 +1,6 @@
 import { mkdir, readFile } from 'node:fs/promises';
 import sharp from 'sharp';
+import { COLORS } from '../../brand/source/tokens.mjs';
 import './build-svg.mjs';
 
 const svgDirectory = 'brand/dist/svg';
@@ -37,7 +38,7 @@ async function renderAvatar() {
       width: size,
       height: size,
       channels: 4,
-      background: { r: 0, g: 0, b: 0, alpha: 0 }
+      background: COLORS.mist
     }
   })
     .composite([{

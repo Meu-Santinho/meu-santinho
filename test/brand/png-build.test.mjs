@@ -18,3 +18,12 @@ test('PNG exports have exact widths and alpha channels', async () => {
     assert.equal(metadata.hasAlpha, true);
   }
 });
+
+test('avatar uses the approved mist background', async () => {
+  const { data, info } = await sharp('brand/dist/png/avatar-1080.png')
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  assert.equal(info.channels, 4);
+  assert.deepEqual([...data.subarray(0, 4)], [242, 247, 239, 255]);
+});

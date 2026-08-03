@@ -453,7 +453,7 @@ Expected: FAIL because `brand/dist/png/logo-primary-1200.png` does not exist.
 
 - [ ] **Step 3: Implement deterministic raster exports**
 
-`scripts/brand/render-png.mjs` must run the SVG builder first, create `brand/dist/png`, and render each SVG with `sharp(Buffer.from(svg), { density: 288 })`. Resize with `fit: 'inside'` and no enlargement. The avatar job must composite the full symbol, occupying 62% of a 1080 × 1080 transparent square; do not bake the rounded container into the symbol. All other jobs retain transparent backgrounds.
+`scripts/brand/render-png.mjs` must run the SVG builder first, create `brand/dist/png`, and render each SVG with `sharp(Buffer.from(svg), { density: 288 })`. Resize with `fit: 'inside'` and no enlargement. The avatar job must composite the full symbol, occupying 62% of a 1080 × 1080 square filled with `#F2F7EF`; do not bake a rounded container into the symbol. All other jobs retain transparent backgrounds.
 
 - [ ] **Step 4: Add SVG-to-PNG parity verification**
 

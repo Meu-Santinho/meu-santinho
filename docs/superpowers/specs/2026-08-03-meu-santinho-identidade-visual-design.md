@@ -1,7 +1,7 @@
 # Meu Santinho — Especificação da identidade visual
 
 **Data:** 3 de agosto de 2026  
-**Status:** conceito visual aprovado; especificação aguardando revisão final  
+**Status:** aprovado para implementação
 **Escopo:** logomarca e fundamentos essenciais da identidade visual
 
 ## 1. Objetivo

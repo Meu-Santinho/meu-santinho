@@ -1,0 +1,16 @@
+[
+  {
+    "id": 280002541457,
+    "nomeUrna": "HERTZ DIAS",
+    "nomeCompleto": "HERTZ DIAS",
+    "numero": 16,
+    "partido": { "sigla": "PSTU" }
+  },
+  {
+    "id": 280002541458,
+    "nomeUrna": "OUTRO CANDIDATO",
+    "nomeCompleto": "OUTRO CANDIDATO COMPLETO",
+    "numero": 22,
+    "partido": { "sigla": "PL" }
+  }
+]

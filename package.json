@@ -11,7 +11,8 @@
     "brand:verify": "npm test && npm run brand:svg && npm run brand:png && npm run brand:sheet && npm test",
     "story:empty": "node scripts/story/render-demo.mjs --empty",
     "story:demo": "node scripts/story/render-demo.mjs",
-    "story:verify": "npm test && npm run story:empty && npm run story:demo && npm test"
+    "story:verify": "npm test && npm run story:empty && npm run story:demo && npm test",
+    "tse:test": "node --test test/tse/*.test.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "1.0.3",

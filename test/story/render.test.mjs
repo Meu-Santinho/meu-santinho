@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { StoryValidationError, renderStory } from '../../story/source/render.mjs';
+import {
+  PreviewStaleError,
+  StoryValidationError,
+  renderStory,
+} from '../../story/source/render.mjs';
 
 function recordingContext() {
   const calls = [];
@@ -164,4 +168,30 @@ test('loads a photo through the supplied resolver and falls back when it fails',
     resolvePhoto: async () => { throw new Error('missing'); },
   });
   assert.ok(failure.calls.some(({ method }) => method === 'ellipse'));
+});
+
+test('does not paint a photo when the preview generation goes stale during resolvePhoto', async () => {
+  const resolved = { width: 200, height: 400 };
+  let current = true;
+  const ctx = recordingContext();
+
+  await assert.rejects(
+    () => renderStory(ctx, {
+      uf: 'BA',
+      president: candidate('p1', '01', { photo: '/photo.png' }),
+    }, {
+      logo,
+      isCurrent: () => current,
+      resolvePhoto: async () => {
+        current = false;
+        return resolved;
+      },
+    }),
+    (error) => error instanceof PreviewStaleError,
+  );
+
+  assert.equal(
+    ctx.calls.some(({ method, args }) => method === 'drawImage' && args[0] === resolved),
+    false,
+  );
 });

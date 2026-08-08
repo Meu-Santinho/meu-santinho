@@ -16,6 +16,13 @@ export class StoryValidationError extends Error {
   }
 }
 
+export class PreviewStaleError extends Error {
+  constructor() {
+    super('Prévia obsoleta.');
+    this.name = 'PreviewStaleError';
+  }
+}
+
 function fillRoundedRect(ctx, box, radius, color) {
   ctx.save();
   ctx.fillStyle = color;
@@ -189,6 +196,7 @@ async function drawCandidateCard(ctx, slot, candidate, index, assets) {
   } else {
     try {
       const photo = await resolvePhoto(candidate, assets);
+      throwIfPreviewStale(assets);
       drawCoverImage(ctx, photo, photoBox, STORY.card.photoRadius);
     } catch (error) {
       if (error?.name === 'PreviewStaleError') throw error;
@@ -223,6 +231,10 @@ function drawFooter(ctx) {
 
 function previewIsStale(assets) {
   return typeof assets.isCurrent === 'function' && !assets.isCurrent();
+}
+
+function throwIfPreviewStale(assets) {
+  if (previewIsStale(assets)) throw new PreviewStaleError();
 }
 
 export async function renderStory(ctx, input, assets = {}) {

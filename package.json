@@ -13,6 +13,7 @@
     "story:demo": "node scripts/story/render-demo.mjs",
     "story:verify": "npm test && npm run story:empty && npm run story:demo && npm test",
     "tse:test": "node --test test/tse/*.test.mjs",
+    "tse:verify": "npm run tse:test && npm run story:verify",
     "web:dev": "npm --prefix web run dev",
     "web:build": "npm --prefix web run build",
     "web:deploy": "npm --prefix web run deploy"

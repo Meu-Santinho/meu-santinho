@@ -30,6 +30,52 @@ test('filterCandidates por nome e limita a 20', () => {
   assert.equal(hits.length, 20);
 });
 
+test('filterCandidates encontra nomes sem considerar acentos', () => {
+  const hits = filterCandidates([{
+    id: 1,
+    nomeUrna: 'TRISTÃO',
+    nomeCompleto: 'Tristão da Silva',
+    numero: 10,
+    partido: { sigla: 'X' },
+  }], {
+    q: 'tristao',
+    slotKey: 'president',
+    electoralUnit: 'BR',
+    photoProxyBase: '/api/tse/photo',
+  });
+
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].name, 'TRISTÃO');
+});
+
+test('filterCandidates exclui candidaturas com situação claramente inválida', () => {
+  const hits = filterCandidates([
+    {
+      id: 1,
+      nomeUrna: 'CANDIDATO INDEFERIDO',
+      nomeCompleto: 'Candidato Indeferido',
+      numero: 10,
+      partido: { sigla: 'X' },
+      situacaoCandidatura: 'Indeferido',
+    },
+    {
+      id: 2,
+      nomeUrna: 'CANDIDATO AGUARDANDO',
+      nomeCompleto: 'Candidato Aguardando Julgamento',
+      numero: 11,
+      partido: { sigla: 'Y' },
+      situacaoCandidatura: 'Aguardando julgamento',
+    },
+  ], {
+    q: 'candidato',
+    slotKey: 'president',
+    electoralUnit: 'BR',
+    photoProxyBase: '/api/tse/photo',
+  });
+
+  assert.deepEqual(hits.map(({ id }) => id), ['2']);
+});
+
 test('filterCandidates por número exato do cargo', () => {
   const hits = filterCandidates(list, {
     q: '16',

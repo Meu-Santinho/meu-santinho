@@ -1,5 +1,11 @@
 import { PHOTO_ALLOWED_HOSTS } from './constants.mjs';
 
+const PHOTO_PATH_PREFIX = '/divulga/rest/arquivo/img/';
+
+export function isAllowedPhotoContentType(contentType) {
+  return String(contentType ?? '').toLowerCase().startsWith('image/');
+}
+
 export function assertAllowedPhotoUrl(urlString) {
   let url;
   try {
@@ -17,6 +23,11 @@ export function assertAllowedPhotoUrl(urlString) {
   if (!PHOTO_ALLOWED_HOSTS.includes(url.hostname)) {
     const err = new Error('Host de foto não permitido.');
     err.code = 'forbidden_host';
+    throw err;
+  }
+  if (!url.pathname.startsWith(PHOTO_PATH_PREFIX)) {
+    const err = new Error('Caminho de foto não permitido.');
+    err.code = 'forbidden_path';
     throw err;
   }
   return url;

@@ -103,6 +103,10 @@ const ufs = [
 
         const card = document.createElement('div');
         card.className = 'selected-candidate';
+        const photo = document.createElement('img');
+        photo.className = 'selected-candidate-photo';
+        photo.src = candidate.photo;
+        photo.alt = `Foto de ${candidate.name}`;
         const text = document.createElement('span');
         const name = document.createElement('strong');
         name.textContent = candidate.name;
@@ -112,7 +116,7 @@ const ufs = [
         clear.type = 'button';
         clear.dataset.clearSlot = slotKey;
         clear.textContent = 'Limpar';
-        card.append(text, clear);
+        card.append(photo, text, clear);
         container.append(card);
       }
 

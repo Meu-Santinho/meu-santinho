@@ -42,6 +42,6 @@ O proxy **não** funciona em páginas estáticas pré-renderizadas; as rotas aci
 1. **`web/src/lib/story-browser.js`** — estado `storyData` (`uf` + seis slots), busca com debounce de 300 ms, aborto de requisições ao trocar UF ou slot, e helpers de prévia/download.
 2. **`story/source/render.mjs`** — desenha o layout no canvas; fotos via `resolvePhoto` (URLs do proxy `/api/tse/photo`).
 3. **`story/source/tokens.mjs`** — ordem dos cargos, rótulos e metadados (ex.: deputado distrital em DF).
-4. **`story/source/validation.mjs`** — normalização e erros (`StoryValidationError`) antes do desenho.
+4. **`story/source/validation.mjs`** — normalização dos dados antes do desenho; `StoryValidationError` é exportado por `story/source/render.mjs`.
 
 Contrato completo e exemplos: `../story/README.md`. Testes do adaptador TSE: `npm run tse:test` na raiz; pipeline story: `npm run story:verify`.

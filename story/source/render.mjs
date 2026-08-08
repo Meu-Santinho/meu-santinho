@@ -201,6 +201,7 @@ async function drawCandidateCard(ctx, slot, candidate, index, assets) {
     } catch (error) {
       if (error?.name === 'PreviewStaleError') throw error;
       drawPhotoFallback(ctx, photoBox, STORY.card.photoRadius);
+      throwIfPreviewStale(assets);
     }
   }
 

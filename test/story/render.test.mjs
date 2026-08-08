@@ -170,6 +170,30 @@ test('loads a photo through the supplied resolver and falls back when it fails',
   assert.ok(failure.calls.some(({ method }) => method === 'ellipse'));
 });
 
+test('interrompe o desenho após a foto falhar em uma prévia obsoleta', async () => {
+  let current = true;
+  const ctx = recordingContext();
+
+  await assert.rejects(
+    () => renderStory(ctx, {
+      uf: 'BA',
+      president: candidate('p1', '01', { photo: '/missing.png' }),
+    }, {
+      logo,
+      isCurrent: () => current,
+      resolvePhoto: async () => {
+        current = false;
+        throw new Error('missing');
+      },
+    }),
+    (error) => error instanceof PreviewStaleError,
+  );
+
+  assert.equal(ctx.calls.some(({ method, args }) => (
+    method === 'fillText' && args[0] === 'PRESIDENTE'
+  )), false);
+});
+
 test('does not paint a photo when the preview generation goes stale during resolvePhoto', async () => {
   const resolved = { width: 200, height: 400 };
   let current = true;

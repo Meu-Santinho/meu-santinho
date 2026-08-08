@@ -1,4 +1,8 @@
-import { renderStory, StoryValidationError } from '@story/render.mjs';
+import {
+  PreviewStaleError,
+  renderStory,
+  StoryValidationError,
+} from '@story/render.mjs';
 import { getSlotDefinitions } from '@story/tokens.mjs';
 
 const TSE_ERROR_MESSAGE = 'Não foi possível consultar o TSE. Tente de novo.';
@@ -86,13 +90,6 @@ export function createStoryBrowser({ fetchImpl = fetch } = {}) {
       }
     },
   };
-}
-
-export class PreviewStaleError extends Error {
-  constructor() {
-    super('Prévia obsoleta.');
-    this.name = 'PreviewStaleError';
-  }
 }
 
 function loadImage(url) {

@@ -12,7 +12,10 @@
     "story:empty": "node scripts/story/render-demo.mjs --empty",
     "story:demo": "node scripts/story/render-demo.mjs",
     "story:verify": "npm test && npm run story:empty && npm run story:demo && npm test",
-    "tse:test": "node --test test/tse/*.test.mjs"
+    "tse:test": "node --test test/tse/*.test.mjs",
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build",
+    "web:deploy": "npm --prefix web run deploy"
   },
   "dependencies": {
     "@napi-rs/canvas": "1.0.3",

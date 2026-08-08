@@ -216,12 +216,17 @@ const ufs = [
         slotElement(key).querySelector('.search-input').addEventListener('input', createSearch(key));
       }
 
+      function invalidatePreview() {
+        previewGeneration += 1;
+        downloadButton.disabled = true;
+        setPreviewError();
+      }
+
       ufSelect.addEventListener('change', () => {
+        invalidatePreview();
         browser.setUf(ufSelect.value);
         renderSlotLabels();
         clearSlotsForUfChange();
-        downloadButton.disabled = true;
-        setPreviewError();
       });
 
       document.querySelector('.slots').addEventListener('click', async (event) => {

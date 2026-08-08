@@ -190,7 +190,8 @@ async function drawCandidateCard(ctx, slot, candidate, index, assets) {
     try {
       const photo = await resolvePhoto(candidate, assets);
       drawCoverImage(ctx, photo, photoBox, STORY.card.photoRadius);
-    } catch {
+    } catch (error) {
+      if (error?.name === 'PreviewStaleError') throw error;
       drawPhotoFallback(ctx, photoBox, STORY.card.photoRadius);
     }
   }
@@ -220,11 +221,18 @@ function drawFooter(ctx) {
   ctx.restore();
 }
 
+function previewIsStale(assets) {
+  return typeof assets.isCurrent === 'function' && !assets.isCurrent();
+}
+
 export async function renderStory(ctx, input, assets = {}) {
   const validation = validateStoryData(input);
   if (!validation.ok) throw new StoryValidationError(validation.issues);
   if (!isDrawableImage(assets.logo)) {
     throw new TypeError('Forneça a logomarca horizontal carregada em assets.logo.');
+  }
+  if (previewIsStale(assets)) {
+    return { width: STORY.width, height: STORY.height };
   }
 
   ctx.fillStyle = COLORS.mist;
@@ -235,6 +243,9 @@ export async function renderStory(ctx, input, assets = {}) {
   const slots = getSlotDefinitions(validation.value.uf);
   for (const [index, slot] of slots.entries()) {
     await drawCandidateCard(ctx, slot, validation.value[slot.key], index, assets);
+    if (previewIsStale(assets)) {
+      return { width: STORY.width, height: STORY.height };
+    }
   }
 
   drawFooter(ctx);

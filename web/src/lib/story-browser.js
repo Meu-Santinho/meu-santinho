@@ -81,6 +81,13 @@ export function createStoryBrowser({ fetchImpl = fetch } = {}) {
   };
 }
 
+export class PreviewStaleError extends Error {
+  constructor() {
+    super('Prévia obsoleta.');
+    this.name = 'PreviewStaleError';
+  }
+}
+
 function loadImage(url) {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -90,18 +97,31 @@ function loadImage(url) {
   });
 }
 
-export async function renderPreview(canvas, state, { logo }) {
+export async function renderPreview(canvas, state, { logo, isCurrent = () => true } = {}) {
   const context = canvas.getContext('2d');
   if (!context) throw new TypeError('Não foi possível criar o contexto da prévia.');
 
+  if (!isCurrent()) return;
+
   const loadedLogo = logo instanceof Promise ? await logo : logo;
+  if (!isCurrent()) return;
+
   const photos = new Map();
   const resolvePhoto = async (url) => {
     if (!photos.has(url)) photos.set(url, loadImage(url));
-    return photos.get(url);
+    const image = await photos.get(url);
+    if (!isCurrent()) throw new PreviewStaleError();
+    return image;
   };
 
-  await renderStory(context, state, { logo: loadedLogo, resolvePhoto });
+  try {
+    await renderStory(context, state, { logo: loadedLogo, resolvePhoto, isCurrent });
+  } catch (error) {
+    if (error instanceof PreviewStaleError) return;
+    throw error;
+  }
+
+  if (!isCurrent()) return;
 }
 
 export async function loadStoryLogo() {

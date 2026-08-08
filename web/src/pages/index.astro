@@ -81,6 +81,7 @@ const ufs = [
       const updatePreviewButton = document.querySelector('[data-update-preview]');
       const downloadButton = document.querySelector('[data-download]');
       const logo = loadStoryLogo();
+      let previewGeneration = 0;
 
       function slotElement(slotKey) {
         return document.querySelector(`[data-slot="${slotKey}"]`);
@@ -165,13 +166,21 @@ const ufs = [
       }
 
       async function updatePreview() {
+        previewGeneration += 1;
+        const myGen = previewGeneration;
         setPreviewError();
         updatePreviewButton.disabled = true;
         try {
           await document.fonts.ready;
-          await renderPreview(canvas, browser.state, { logo });
+          if (myGen !== previewGeneration) return;
+          await renderPreview(canvas, browser.state, {
+            logo,
+            isCurrent: () => myGen === previewGeneration,
+          });
+          if (myGen !== previewGeneration) return;
           downloadButton.disabled = false;
         } catch (error) {
+          if (myGen !== previewGeneration) return;
           downloadButton.disabled = true;
           if (error instanceof StoryValidationError) {
             setPreviewError(error.issues.map(({ message }) => message).join(' '));

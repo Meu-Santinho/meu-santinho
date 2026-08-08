@@ -38,6 +38,11 @@ export function createStoryBrowser({ fetchImpl = fetch } = {}) {
       const uf = normalizeUf(value);
       if (state.uf === uf) return state;
 
+      for (const controller of controllers.values()) {
+        controller.abort();
+      }
+      controllers.clear();
+
       state.uf = uf;
       for (const { key } of getSlotDefinitions()) {
         if (key !== 'president') state[key] = null;
@@ -65,14 +70,16 @@ export function createStoryBrowser({ fetchImpl = fetch } = {}) {
       controllers.get(slotKey)?.abort();
       const controller = new AbortController();
       controllers.set(slotKey, controller);
+      const requestUf = state.uf;
 
       try {
-        const response = await fetchImpl(toSearchUrl(slotKey, normalizedQuery, state.uf), {
+        const response = await fetchImpl(toSearchUrl(slotKey, normalizedQuery, requestUf), {
           signal: controller.signal,
         });
         if (!response.ok) throw new Error(TSE_ERROR_MESSAGE);
 
         const payload = await response.json();
+        if (controller.signal.aborted || state.uf !== requestUf) return [];
         return Array.isArray(payload.results) ? payload.results : [];
       } finally {
         if (controllers.get(slotKey) === controller) controllers.delete(slotKey);

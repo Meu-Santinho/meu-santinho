@@ -200,8 +200,11 @@ const ufs = [
           if (!query) return;
 
           try {
+            const ufForRequest = browser.state.uf;
             const results = await browser.search(slotKey, query);
-            if (event.target.value.trim() === query) renderResults(slotKey, results);
+            if (browser.state.uf !== ufForRequest) return;
+            if (event.target.value.trim() !== query) return;
+            renderResults(slotKey, results);
           } catch (error) {
             if (error.name === 'AbortError') return;
             const message = document.createElement('li');

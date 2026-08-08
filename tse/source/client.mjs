@@ -5,10 +5,11 @@ import {
   getElectoralUnit,
 } from './constants.mjs';
 
-function upstreamError(message, cause) {
+function upstreamError(message, cause, status) {
   const err = new Error(message);
   err.code = 'tse_upstream';
   err.cause = cause;
+  if (status) err.status = status;
   return err;
 }
 
@@ -21,7 +22,9 @@ export function createTseClient({ fetchImpl = fetch, timeoutMs = 15000 } = {}) {
         headers: { Accept: 'application/json', 'User-Agent': 'meusantinho/0.1' },
         signal: controller.signal,
       });
-      if (!response.ok) throw upstreamError(`TSE respondeu ${response.status}`);
+      if (!response.ok) {
+        throw upstreamError(`TSE respondeu ${response.status}`, undefined, response.status);
+      }
       return await response.json();
     } catch (cause) {
       if (cause?.code === 'tse_upstream') throw cause;

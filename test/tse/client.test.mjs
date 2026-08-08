@@ -25,3 +25,13 @@ test('listCandidates propaga falha HTTP como tse_upstream', async () => {
     (err) => err.code === 'tse_upstream',
   );
 });
+
+test('getCandidate preserva o status 404 do TSE', async () => {
+  const fetchImpl = async () => new Response('não encontrado', { status: 404 });
+  const client = createTseClient({ fetchImpl });
+
+  await assert.rejects(
+    () => client.getCandidate({ uf: 'BA', slotKey: 'governor', id: '123' }),
+    (err) => err.code === 'tse_upstream' && err.status === 404,
+  );
+});

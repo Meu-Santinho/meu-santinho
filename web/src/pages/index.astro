@@ -1,17 +1,249 @@
 ---
+import '../styles/app.css';
 
+const slots = [
+  ['federalDeputy', 'DEPUTADO FEDERAL'],
+  ['stateOrDistrictDeputy', 'DEPUTADO ESTADUAL'],
+  ['senatorFirstSeat', 'SENADOR · 1ª VAGA'],
+  ['senatorSecondSeat', 'SENADOR · 2ª VAGA'],
+  ['governor', 'GOVERNADOR'],
+  ['president', 'PRESIDENTE'],
+];
+
+const ufs = [
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
+  'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
+  'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+];
 ---
 
 <html lang="pt-BR">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Meu Santinho 2026</title>
-	</head>
-	<body>
-		<h1>Meu Santinho 2026</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Meu Santinho 2026</title>
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <img class="brand" src="/brand/logo-horizontal.svg" alt="Meu Santinho" />
+        <span class="year">2026</span>
+        <label class="uf-field" for="uf">UF
+          <select id="uf" required>
+            <option value="">Selecione</option>
+            {ufs.map((uf) => <option value={uf}>{uf}</option>)}
+          </select>
+        </label>
+      </header>
+
+      <div class="layout">
+        <section class="slots" aria-label="Candidatos selecionados">
+          {slots.map(([key, label]) => (
+            <section class="slot" data-slot={key}>
+              <h2 class="slot-title" data-slot-label>{label}</h2>
+              <input class="search-input" type="search" placeholder="nome ou número" autocomplete="off" disabled />
+              <p class="hint">Selecione uma UF para pesquisar.</p>
+              <ul class="results" aria-live="polite"></ul>
+              <div class="selected" aria-live="polite"></div>
+            </section>
+          ))}
+        </section>
+
+        <aside class="preview-panel">
+          <canvas class="preview-canvas" width="1080" height="1920" aria-label="Prévia do santinho"></canvas>
+          <div class="preview-actions">
+            <button class="primary-button" type="button" data-update-preview>Atualizar prévia</button>
+            <button class="download-button" type="button" data-download disabled>Baixar PNG</button>
+          </div>
+          <div class="preview-error" data-preview-error aria-live="assertive"></div>
+        </aside>
+      </div>
+    </main>
+
+    <script type="module">
+      import {
+        StoryValidationError,
+        createStoryBrowser,
+        debounce,
+        downloadPng,
+        loadStoryLogo,
+        renderPreview,
+      } from '../lib/story-browser.js';
+      import { getSlotDefinitions } from '@story/tokens.mjs';
+
+      const browser = createStoryBrowser();
+      const ufSelect = document.querySelector('#uf');
+      const canvas = document.querySelector('.preview-canvas');
+      const previewError = document.querySelector('[data-preview-error]');
+      const updatePreviewButton = document.querySelector('[data-update-preview]');
+      const downloadButton = document.querySelector('[data-download]');
+      const logo = loadStoryLogo();
+
+      function slotElement(slotKey) {
+        return document.querySelector(`[data-slot="${slotKey}"]`);
+      }
+
+      function setPreviewError(message = '') {
+        previewError.textContent = message;
+      }
+
+      function clearResults(slot) {
+        slot.querySelector('.results').replaceChildren();
+      }
+
+      function renderSelected(slotKey) {
+        const container = slotElement(slotKey).querySelector('.selected');
+        const candidate = browser.state[slotKey];
+        container.replaceChildren();
+        if (!candidate) return;
+
+        const card = document.createElement('div');
+        card.className = 'selected-candidate';
+        const text = document.createElement('span');
+        const name = document.createElement('strong');
+        name.textContent = candidate.name;
+        text.append(name, ` · ${candidate.party} · ${candidate.number}`);
+        const clear = document.createElement('button');
+        clear.className = 'clear-slot';
+        clear.type = 'button';
+        clear.dataset.clearSlot = slotKey;
+        clear.textContent = 'Limpar';
+        card.append(text, clear);
+        container.append(card);
+      }
+
+      function renderSlotLabels() {
+        for (const { key, label } of getSlotDefinitions(browser.state.uf)) {
+          slotElement(key).querySelector('[data-slot-label]').textContent = label;
+        }
+      }
+
+      function clearSlotsForUfChange() {
+        for (const { key } of getSlotDefinitions()) {
+          const slot = slotElement(key);
+          const input = slot.querySelector('.search-input');
+          input.value = '';
+          input.disabled = !browser.state.uf;
+          slot.querySelector('.hint').textContent = browser.state.uf ? '' : 'Selecione uma UF para pesquisar.';
+          clearResults(slot);
+          renderSelected(key);
+        }
+      }
+
+      function renderResults(slotKey, candidates) {
+        const slot = slotElement(slotKey);
+        const results = slot.querySelector('.results');
+        results.replaceChildren();
+
+        if (!candidates.length) {
+          const empty = document.createElement('li');
+          empty.className = 'empty-results';
+          empty.textContent = 'Nenhum candidato encontrado.';
+          results.append(empty);
+          return;
+        }
+
+        for (const candidate of candidates) {
+          const item = document.createElement('li');
+          const button = document.createElement('button');
+          button.className = 'result';
+          button.type = 'button';
+          button.dataset.selectCandidate = JSON.stringify(candidate);
+          const name = document.createElement('span');
+          name.className = 'candidate-name';
+          name.textContent = candidate.name;
+          const meta = document.createElement('span');
+          meta.className = 'candidate-meta';
+          meta.textContent = `${candidate.party} · ${candidate.number}`;
+          button.append(name, meta);
+          item.append(button);
+          results.append(item);
+        }
+      }
+
+      async function updatePreview() {
+        setPreviewError();
+        updatePreviewButton.disabled = true;
+        try {
+          await document.fonts.ready;
+          await renderPreview(canvas, browser.state, { logo });
+          downloadButton.disabled = false;
+        } catch (error) {
+          downloadButton.disabled = true;
+          if (error instanceof StoryValidationError) {
+            setPreviewError(error.issues.map(({ message }) => message).join(' '));
+            return;
+          }
+          setPreviewError('Não foi possível gerar a prévia.');
+        } finally {
+          updatePreviewButton.disabled = false;
+        }
+      }
+
+      function createSearch(slotKey) {
+        return debounce(async (event) => {
+          const slot = slotElement(slotKey);
+          const query = event.target.value.trim();
+          clearResults(slot);
+          if (!query) return;
+
+          try {
+            const results = await browser.search(slotKey, query);
+            if (event.target.value.trim() === query) renderResults(slotKey, results);
+          } catch (error) {
+            if (error.name === 'AbortError') return;
+            const message = document.createElement('li');
+            message.className = 'search-error';
+            message.textContent = 'Não foi possível consultar o TSE. Tente de novo.';
+            slot.querySelector('.results').append(message);
+          }
+        }, 300);
+      }
+
+      for (const { key } of getSlotDefinitions()) {
+        slotElement(key).querySelector('.search-input').addEventListener('input', createSearch(key));
+      }
+
+      ufSelect.addEventListener('change', () => {
+        browser.setUf(ufSelect.value);
+        renderSlotLabels();
+        clearSlotsForUfChange();
+        downloadButton.disabled = true;
+        setPreviewError();
+      });
+
+      document.querySelector('.slots').addEventListener('click', async (event) => {
+        const clear = event.target.closest('[data-clear-slot]');
+        if (clear) {
+          browser.clearSlot(clear.dataset.clearSlot);
+          renderSelected(clear.dataset.clearSlot);
+          downloadButton.disabled = true;
+          await updatePreview();
+          return;
+        }
+
+        const result = event.target.closest('[data-select-candidate]');
+        if (!result) return;
+        const slotKey = result.closest('[data-slot]').dataset.slot;
+        browser.selectCandidate(slotKey, JSON.parse(result.dataset.selectCandidate));
+        clearResults(result.closest('[data-slot]'));
+        renderSelected(slotKey);
+        downloadButton.disabled = true;
+        await updatePreview();
+      });
+
+      updatePreviewButton.addEventListener('click', updatePreview);
+      downloadButton.addEventListener('click', async () => {
+        setPreviewError();
+        try {
+          await downloadPng(canvas);
+        } catch {
+          setPreviewError('Não foi possível baixar o PNG.');
+        }
+      });
+    </script>
+  </body>
 </html>

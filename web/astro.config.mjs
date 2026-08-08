@@ -12,6 +12,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@tse': fileURLToPath(new URL('../tse/source', import.meta.url)),
+        '@story': fileURLToPath(new URL('../story/source', import.meta.url)),
       },
     },
     server: {
